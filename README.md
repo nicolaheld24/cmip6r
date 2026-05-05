@@ -134,7 +134,7 @@ plot_timeseries(df_126,
 ```
 
 ---
-## Compare Multiple Scenario 
+## Compare Multiple Scenarios 
  
 Compare multiple SSP scenarios in a single plot:
  
