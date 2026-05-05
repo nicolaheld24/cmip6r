@@ -18,3 +18,5 @@ Imports:
     ggtext,
     showtext,
     sysfonts
+URL: https://github.com/nicolaheld24/cmip6r
+BugReports: https://github.com/nicolaheld24/cmip6r/issues
