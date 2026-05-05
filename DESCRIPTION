@@ -1,0 +1,20 @@
+Package: cmip6r
+Title: Download and Visualize CMIP6 Climate Data
+Version: 0.0.0.9000
+Authors@R: 
+    person("Nicola", "Held", , "nicola.held@magenta.de", role = c("aut", "cre"))
+Description: Provides tools to download CMIP6 climate model data from the 
+    Copernicus Climate Data Store (CDS) via API and visualize scenarios 
+    including temperature, precipitation, and other climate variables.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports:
+    reticulate,
+    ncdf4,
+    dplyr,
+    ggplot2,
+    ggtext,
+    showtext,
+    sysfonts
