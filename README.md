@@ -5,7 +5,7 @@
 [![R-CMD-check](https://github.com/nicolaheld24/cmip6r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nicolaheld24/cmip6r/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
  
-> Download, process, and visualize CMIP6 climate scenario data from the [Copernicus Climate Data Store (CDS)](https://cds.climate.copernicus.eu) directly from R.
+> Download, process, and visualize CMIP6 climate scenario data from the [Copernicus Climate Data Store (CDS)](https://cds.climate.copernicus.eu) and visualize them with publication-ready plots. 
  
 ## Overview
  
@@ -40,15 +40,15 @@ remotes::install_github("nicolaheld24/cmip6r")
  
 `cmip6r` downloads data from the **Copernicus Climate Data Store (CDS)** via Python. 
  
-### Step 1 — Create a CDS account
+### 1. Create a CDS account
  
 Register for free at [cds.climate.copernicus.eu](https://cds.climate.copernicus.eu) to get access to your API key.
  
-### Step 2 — Find your API key
+### 2. Find your API key
  
 After logging in, go to your **profile page** (top right → your username). The URL and your personal **API key** are displayed there.
  
-### Step 3 — Create the `.cdsapirc` file
+### 3. Create the `.cdsapirc` file
  
 The CDS API looks for a hidden config file in your home directory. Create it like this:
  
@@ -68,14 +68,14 @@ key: YOUR-API-KEY" > ~/.cdsapirc
  
 > Replace `YOUR-API-KEY` with the key from your CDS profile page.
  
-### Step 4 — Accept dataset licence
+### 4. — Accept dataset licence
  
 Before downloading CMIP6 data for the first time, you need to accept the licence on the CDS website:
  
 1. Go to: [CMIP6 dataset page](https://cds.climate.copernicus.eu/datasets/projections-cmip6?tab=download)
 2. Scroll down to **"Terms of use"** and click **Accept**
 
-### Step 5 — Verify the setup in R
+### 5. — Verify the setup in R
  
 ```r
 library(cmip6r)
@@ -85,8 +85,6 @@ get_cmip6_data(start_year = 2015, end_year = 2015, months = 1)
 ```
  
 ---
-
- 
 ## Quick Start
  
 ```r
@@ -116,9 +114,8 @@ If not specified, the default is `"daily"`.
 
 ```r
 
-
-# 3. Read the downloaded NetCDF file
-df_126 <- read_cmip6(result_126$file, scenario = "ssp245")
+# 3. Read the downloaded NetCDF file into R
+df_126 <- read_cmip6(result_126$file, scenario = "ssp126")
 
 # Fallback (if automatic file detection fails)
 df_126 <- read_cmip6("yourpath/data/tasmax_Amon_AWI-CM-1-1-MR_ssp126_r1i1p1f1_gn_20200116-21001216.nc", scenario = "ssp126" )
@@ -127,7 +124,6 @@ df_126 <- read_cmip6("yourpath/data/tasmax_Amon_AWI-CM-1-1-MR_ssp126_r1i1p1f1_gn
 plot_timeseries(df_126, title = "Monthly Near-Surface Air Temperature \n Bavaria (2020-2100)")
 
 ```
-
 ### Optional: Light theme version 
 ```r
 # 5. Light theme version
@@ -136,10 +132,9 @@ plot_timeseries(df_126,
   theme = "light"
 )
 ```
- 
+
 ---
- 
-## Scenario Comparison
+## Compare Multiple Scenario 
  
 Compare multiple SSP scenarios in a single plot:
  
@@ -154,20 +149,19 @@ plot_timeseries(
   title = "Temperature Projections – SSP Comparison"
 )
 ```
- 
+
 ---
- 
 ## Supported Scenarios & Variables
  
 ### SSP Scenarios
  
 | Scenario | Description |
 |----------|-------------|
-| `"historical"` | Historical simulation (1980-2014) |
-| `"ssp126"` | Sustainable development (~1.9°C) |
-| `"ssp245"` | Middle of the road (~2.7°C) |
-| `"ssp370"` | High emissions (~3.6°C) |
-| `"ssp585"` | Very high emissions (~4.4°C) |
+| `"historical"` | Historical simulation (1850–2014) |
+| `"ssp126"` | Low emissions – sustainable development pathway |
+| `"ssp245"` | Intermediate emissions – middle of the road |
+| `"ssp370"` | High emissions – regional rivalry |
+| `"ssp585"` | Very high emissions – fossil-fuelled development |
  
 ### Common Variables
  
@@ -181,8 +175,11 @@ plot_timeseries(
 | `"psl"`    | Sea level pressure |
 | `"sfcWind"`| Wind speed |
 
----
- 
+### Supported Models
+
+`cmip6r` supports 29 CMIP6 models including `AWI-CM-1-1-MR`, `CanESM5`, `CESM2`, `MPI-ESM1-2-LR`, and more. Run `?get_cmip6_data` for the full list.
+
+--- 
 ## Plot Options
  
 `plot_timeseries()` offers several customization options:
@@ -204,9 +201,19 @@ When `time_aggregation = "auto"`, the function automatically selects the aggrega
 - **> 20 years** → annual aggregation  
 - **2–20 years** → monthly aggregation  
 - **< 2 years** → daily (no aggregation)
+---
+## Function Reference
+
+| Function | Description |
+|---|---|
+| `set_cmip6_dir()` | Set the directory for downloaded data |
+| `get_cmip6_data()` | Download CMIP6 data from CDS |
+| `read_cmip6()` | Read a `.nc` file into a data frame |
+| `plot_timeseries()` | Plot a time series for one or more scenarios |
+| `theme_cmip6()` | Default ggplot2 theme |
+| `theme_cmip6_light()` | Light ggplot2 theme |
 
 ---
- 
 ## Citation
  
 If you use `cmip6r` in your research, please cite:
@@ -214,8 +221,7 @@ If you use `cmip6r` in your research, please cite:
 ```
 Held, N. (2026). cmip6r: Download and Visualize CMIP6 Climate Scenario Data.
 R package version 0.1.0. https://github.com/nicolaheld24/cmip6r
-```
- 
+``` 
 ---
  
 ## License
