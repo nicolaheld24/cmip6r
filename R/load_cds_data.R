@@ -9,6 +9,17 @@
 
 load_cds_data <- function(request, output_file) {
 
+  # Check .cdsapirc first
+  cdsapirc <- file.path(Sys.getenv("HOME"), ".cdsapirc")
+  if (!file.exists(cdsapirc)) {
+    stop(
+      "No .cdsapirc file found at: ", cdsapirc, "\n",
+      "Please create it with your CDS API key.\n",
+      "See: https://cds.climate.copernicus.eu/how-to-api"
+    )
+  }
+
+  # Check Python package
   if (!reticulate::py_module_available("cdsapi")) {
     message("Python package 'cdsapi' not found. Installing...")
     reticulate::py_install("cdsapi")
