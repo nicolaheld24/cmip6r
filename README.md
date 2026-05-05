@@ -19,6 +19,16 @@
 - **Visualize** time series plots for one or multiple scenarios with trend lines (`plot_timeseries()`)
 - **Flexible regions** — global or custom bounding box
 ---
+
+## Dependencies
+ 
+- **ggplot2** – visualization
+- **dplyr** – data manipulation
+- **ncdf4** – NetCDF file handling
+- **reticulate** – Python integration
+- **ggtext**, **showtext**, **sysfonts** – enhanced plotting and fonts
+
+---
  
 ## Installation
  
@@ -201,14 +211,6 @@ When `time_aggregation = "auto"`, the function automatically selects the aggrega
 - **< 2 years** → daily (no aggregation)
 
 ---
- 
-## Dependencies
- 
-- **ggplot2** – visualization
-- **dplyr** – data manipulation
-- **ncdf4** – NetCDF file handling
-- **reticulate** – Python integration
-- **ggtext**, **showtext**, **sysfonts** – enhanced plotting and fonts
  
 ## Citation
  
