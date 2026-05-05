@@ -18,37 +18,31 @@
 - **Unit conversion** (e.g. Kelvin -> °C)
 - **Visualize** time series plots for one or multiple scenarios with trend lines (`plot_timeseries()`)
 - **Flexible regions** — global or custom bounding box
----
-
-## Dependencies
- 
-- **ggplot2** – visualization
-- **dplyr** – data manipulation
-- **ncdf4** – NetCDF file handling
-- **reticulate** – Python integration
-- **ggtext**, **showtext**, **sysfonts** – enhanced plotting and fonts
-
----
  
 ## Installation
- 
-A CDS API key is required. Register for free at [cds.climate.copernicus.eu](https://cds.climate.copernicus.eu) and follow the setup instructions for the [`ecmwfr`](https://github.com/bluegreen-labs/ecmwfr) package.
- 
+  
 ```r
 # Install cmip6r from GitHub
 # install.packages("remotes")
 remotes::install_github("nicolaheld24/cmip6r")
 ```
+
+## Dependencies
  
+- **`ggplot2`** – visualization
+- **`dplyr`** – data manipulation
+- **`ncdf4`** – NetCDF file handling
+- **`reticulate`** – Python integration
+- **`ggtext`**, **`showtext`**, **`sysfonts`** – enhanced plotting and fonts
+
 ---
- 
 ## One-time CDS API Setup (required before first use)
  
-`cmip6r` downloads data from the **Copernicus Climate Data Store (CDS)** via Python. You need a free account and an API key.
+`cmip6r` downloads data from the **Copernicus Climate Data Store (CDS)** via Python. 
  
 ### Step 1 — Create a CDS account
  
-Register for free at [cds.climate.copernicus.eu](https://cds.climate.copernicus.eu).
+Register for free at [cds.climate.copernicus.eu](https://cds.climate.copernicus.eu) to get access to your API key.
  
 ### Step 2 — Find your API key
  
@@ -78,13 +72,14 @@ key: YOUR-API-KEY" > ~/.cdsapirc
  
 Before downloading CMIP6 data for the first time, you need to accept the licence on the CDS website:
  
-1. Go to: [CMIP6 dataset page](https://cds.climate.copernicus.eu/datasets/projections-cmip6)
+1. Go to: [CMIP6 dataset page](https://cds.climate.copernicus.eu/datasets/projections-cmip6?tab=download)
 2. Scroll down to **"Terms of use"** and click **Accept**
 
 ### Step 5 — Verify the setup in R
  
 ```r
 library(cmip6r)
+
 # simple test: should not throw an error
 get_cmip6_data(start_year = 2015, end_year = 2015, months = 1)
 ```
@@ -99,17 +94,6 @@ library(cmip6r)
 
 # 1. Set data directory
 set_cmip6_dir("yourpath/data")
-```
-
-### Optional: Temporal resolution
-You can choose between daily or monthly data:
-
-- `"daily"` → high-resolution climate data (default)
-- `"monthly"` → aggregated monthly values
-
-If not specified, the default is `"daily"`.
-
-```r
  
 # 2. Download monthly maximum temperature (tasmax)
 result_126 <- get_cmip6_data(
@@ -121,7 +105,18 @@ result_126 <- get_cmip6_data(
   region = c(9, 14, 47, 51), # Coordinates of Bavaria 
   temporal_resolution = "monthly"
 )
- 
+```
+### Optional: Temporal resolution
+You can choose between daily or monthly data:
+
+- `"daily"` → high-resolution climate data (default)
+- `"monthly"` → aggregated monthly values
+
+If not specified, the default is `"daily"`.
+
+```r
+
+
 # 3. Read the downloaded NetCDF file
 df_126 <- read_cmip6(result_126$file, scenario = "ssp245")
 
