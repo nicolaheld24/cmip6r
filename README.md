@@ -68,14 +68,14 @@ key: YOUR-API-KEY" > ~/.cdsapirc
  
 > Replace `YOUR-API-KEY` with the key from your CDS profile page.
  
-### 4. — Accept dataset licence
+### 4. Accept dataset licence
  
 Before downloading CMIP6 data for the first time, you need to accept the licence on the CDS website:
  
 1. Go to: [CMIP6 dataset page](https://cds.climate.copernicus.eu/datasets/projections-cmip6?tab=download)
 2. Scroll down to **"Terms of use"** and click **Accept**
 
-### 5. — Verify the setup in R
+### 5. Verify the setup in R
  
 ```r
 library(cmip6r)
