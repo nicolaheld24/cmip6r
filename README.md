@@ -1,9 +1,22 @@
+# cmip6r <img src="man/figures/logo.png" align="right" height="139" alt="" />
+ 
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![R-CMD-check](https://github.com/nicolaheld24/cmip6r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nicolaheld24/cmip6r/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+ 
+> Download, process, and visualize CMIP6 climate scenario data from the [Copernicus Climate Data Store (CDS)](https://cds.climate.copernicus.eu) and visualize them with publication-ready plots. 
+ 
+## Overview
+ 
+`cmip6r` provides a simple interface to access CMIP6 climate model projections. With a single function call, you can download NetCDF data for any model, scenario, variable, time range, and region — and immediately visualize the results.
+ 
 ## What cmip6r can do
 
 `cmip6r` works on two levels:
 
 **Download any CMIP6 variable** — `get_cmip6_data()` works with all variables 
-available on the CDS (temperature, precipitation, humidity, wind, radiation, ...). 
+available on the CDS (temperature, precipitation, humidity, wind, radiation, ...), on a global scale or with a custom bounding box. 
 Downloading via R is faster and more reproducible than using the CDS website manually.
 
 **Ready-made plots for key variables** — `plot_timeseries()` provides automatic 
@@ -18,27 +31,6 @@ unit conversion and visualization for the four most common variables for climate
 
 For other variables, the downloaded NetCDF file can be read with `read_cmip6()` 
 and plotted manually with any R package (e.g. `ggplot2`, `terra`).
-
-# cmip6r <img src="man/figures/logo.png" align="right" height="139" alt="" />
- 
-<!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check](https://github.com/nicolaheld24/cmip6r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nicolaheld24/cmip6r/actions/workflows/R-CMD-check.yaml)
-<!-- badges: end -->
- 
-> Download, process, and visualize CMIP6 climate scenario data from the [Copernicus Climate Data Store (CDS)](https://cds.climate.copernicus.eu) and visualize them with publication-ready plots. 
- 
-## Overview
- 
-`cmip6r` provides a simple interface to access CMIP6 climate model projections. With a single function call, you can download NetCDF data for any model, scenario, variable, time range, and region — and immediately visualize the results.
- 
-**Key features:**
- 
-- **Download** CMIP6 data via the CDS API (`get_cmip6_data()`)
-- **Read** NetCDF files into tidy R data frames (`read_cmip6()`)
-- **Unit conversion** (e.g. Kelvin -> °C)
-- **Visualize** time series plots for one or multiple scenarios with trend lines (`plot_timeseries()`)
-- **Flexible regions** — global or custom bounding box
  
 ## Installation
   
