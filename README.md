@@ -9,14 +9,10 @@
  
 ## Overview
  
-`cmip6r` provides a simple interface to access CMIP6 climate model projections. With a single function call, you can download NetCDF data for any model, scenario, variable, time range, and region — and immediately visualize the results.
- 
-## What cmip6r can do
-
 `cmip6r` works on two levels:
 
-**Download any CMIP6 variable** — `get_cmip6_data()` works with all variables 
-available on the CDS (temperature, precipitation, humidity, wind, radiation, ...), on a global scale or with a custom bounding box. 
+**Download any CMIP6 variable** — `get_cmip6_data()` works with all scenarios, models, and variables 
+available on the CDS (temperature, precipitation, humidity, wind, ...), on a global scale or with a custom bounding box. 
 Downloading via R is faster and more reproducible than using the CDS website manually.
 
 **Ready-made plots for key variables** — `plot_timeseries()` provides automatic 
