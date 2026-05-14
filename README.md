@@ -10,7 +10,8 @@
 ## Overview
  
 `cmip6r` works on two levels:
-
+ // HIER IRGENDWO EINBAUEN, dass Download für alles geht, aber readme & plotten nur für bestimmte 
+ und dass man vorher im internet raussuchen muss am besten 
 **Download any CMIP6 variable** — `get_cmip6_data()` works with all scenarios, models, and variables 
 available on the CDS (temperature, precipitation, humidity, wind, ...), on a global scale or with a custom bounding box. 
 Downloading via R is faster and more reproducible than using the CDS website manually.
@@ -18,12 +19,14 @@ Downloading via R is faster and more reproducible than using the CDS website man
 **Ready-made plots for key variables** — `plot_timeseries()` provides automatic 
 unit conversion and visualization for the four most common variables for climate scenario plotting:
 
+// BIS HIER HIN 
+
 | Variable | Description | Unit |
 |----------|-------------|------|
 | `"tas"`    | Mean near-surface air temperature | °C |
 | `"tasmax"` | Maximum near-surface air temperature | °C |
 | `"tasmin"` | Minimum near-surface air temperature | °C |
-| `"pr"`     | Precipitation | mm/month or mm/day |
+| `"pr"`     | Precipitation | mm/day // mm/month // mm/year |
 
 For other variables, the downloaded NetCDF file can be read with `read_cmip6()` 
 and plotted manually with any R package (e.g. `ggplot2`, `terra`).
