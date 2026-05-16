@@ -5,19 +5,23 @@
 [![R-CMD-check](https://github.com/nicolaheld24/cmip6r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nicolaheld24/cmip6r/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
  
-> Download, process, and visualize CMIP6 climate scenario data from the [Copernicus Climate Data Store (CDS)](https://cds.climate.copernicus.eu) and visualize them with publication-ready plots. 
+> Download, process, and visualize CMIP6 climate scenario data from the [Copernicus Climate Data Store (CDS)](https://cds.climate.copernicus.eu) with publication-ready plots. 
  
 ## Overview
  
 `cmip6r` works on two levels:
- // HIER IRGENDWO EINBAUEN, dass Download für alles geht, aber readme & plotten nur für bestimmte 
- und dass man vorher im internet raussuchen muss am besten 
-**Download any CMIP6 variable** — `get_cmip6_data()` works with all scenarios, models, and variables 
-available on the CDS (temperature, precipitation, humidity, wind, ...), on a global scale or with a custom bounding box. 
-Downloading via R is faster and more reproducible than using the CDS website manually.
 
-**Ready-made plots for key variables** — `plot_timeseries()` provides automatic 
-unit conversion and visualization for the four most common variables for climate scenario plotting:
+**Download any CMIP6 variable** — `get_cmip6_data()` works with all scenarios, models, and variables
+available on the CDS (temperature, precipitation, humidity, wind, and more), on a global scale or
+with a custom bounding box. Downloading via R is faster and more reproducible than using the CDS
+website manually. We recommend checking variable and model availability on the
+[CDS website](https://cds.climate.copernicus.eu/datasets/projections-cmip6?tab=download) before
+downloading, as not all combinations of model, scenario, and variable are available.
+
+**Ready-made plots for key variables** — `plot_timeseries()` provides automatic unit conversion
+and visualization for the four most common variables for climate scenario plotting. For other
+variables, the downloaded NetCDF file can be read with `read_cmip6()` and plotted manually with
+any R package (e.g. `ggplot2`, `terra`).
 
 // BIS HIER HIN 
 
@@ -26,10 +30,7 @@ unit conversion and visualization for the four most common variables for climate
 | `"tas"`    | Mean near-surface air temperature | °C |
 | `"tasmax"` | Maximum near-surface air temperature | °C |
 | `"tasmin"` | Minimum near-surface air temperature | °C |
-| `"pr"`     | Precipitation | mm/day // mm/month // mm/year |
-
-For other variables, the downloaded NetCDF file can be read with `read_cmip6()` 
-and plotted manually with any R package (e.g. `ggplot2`, `terra`).
+| `"pr"`     | Precipitation | mm/month // mm/year |
  
 ## Installation
   
@@ -45,7 +46,8 @@ remotes::install_github("nicolaheld24/cmip6r")
 - **`dplyr`** – data manipulation
 - **`ncdf4`** – NetCDF file handling
 - **`reticulate`** – Python integration
-- **`ggtext`**, **`showtext`**, **`sysfonts`** – enhanced plotting and fonts
+- **`showtext`**, **`sysfonts`** – enhanced fonts for plots
+- **`scales`** – axis formatting
 
 ---
 ## One-time CDS API Setup (required before first use)
@@ -101,131 +103,217 @@ get_cmip6_data(start_year = 2015, end_year = 2015, months = 1)
  
 ```r
 library(cmip6r)
+library(ggplot2)
 
 # 1. Set data directory
 set_cmip6_dir("yourpath/data")
  
-# 2. Download monthly maximum temperature (tasmax)
+# 2. Download monthly maximum temperature for Bavaria
 result_126 <- get_cmip6_data(
-  variable = "tasmax",
-  scenario = "ssp126",
-  start_year = 2020,
-  end_year = 2100,
-  months = 1:12,
-  region = c(9, 14, 47, 51), # Coordinates of Bavaria 
+  variable            = "tasmax",
+  model               = "AWI-CM-1-1-MR",
+  scenario            = "ssp126",
+  start_year          = 2015,
+  end_year            = 2100,
+  months              = 1:12,
+  region              = c(9, 14, 47, 51),  # bounding box: lon_min, lon_max, lat_min, lat_max
   temporal_resolution = "monthly"
 )
-```
-### Optional: Temporal resolution
-You can choose between daily or monthly data:
-
-- `"daily"` → high-resolution climate data (default)
-- `"monthly"` → aggregated monthly values
-
-If not specified, the default is `"daily"`.
-
-```r
 
 # 3. Read the downloaded NetCDF file into R
-df_126 <- read_cmip6(result_126$file, scenario = "ssp126")
+df_126 <- read_cmip6(result_126$file)
 
-# Fallback (if automatic file detection fails)
-df_126 <- read_cmip6("yourpath/data/tasmax_Amon_AWI-CM-1-1-MR_ssp126_r1i1p1f1_gn_20200116-21001216.nc", scenario = "ssp126" )
- 
 # 4. Plot the time series
-plot_timeseries(df_126, title = "Monthly Near-Surface Air Temperature \n Bavaria (2020-2100)")
-
-```
-### Optional: Light theme version 
-```r
-# 5. Light theme version
-plot_timeseries(df_126,
-  title = "Monthly Near-Surface Air Temperature \n Bavaria (2020–2100)",
-  theme = "light"
-)
-```
-
----
-## Compare Multiple Scenarios 
- 
-Compare multiple SSP scenarios in a single plot:
- 
-```r
-df_ssp126 <- read_cmip6("tas_ssp126.nc", scenario = "ssp126")
-df_ssp245 <- read_cmip6("tas_ssp245.nc", scenario = "ssp245")
-df_ssp585 <- read_cmip6("tas_ssp585.nc", scenario = "ssp585")
- 
 plot_timeseries(
-  df_ssp126, df_ssp245, df_ssp585,
-  time_aggregation = "annual",
-  title = "Temperature Projections – SSP Comparison"
+  df_126,
+  title = "Monthly Maximum Temperature\nBavaria (2015-2100)"
 )
 ```
 
 ---
-## Supported Scenarios & Variables
- 
-### SSP Scenarios
- 
-| Scenario | Description |
-|----------|-------------|
-| `"historical"` | Historical simulation (1850–2014) |
-| `"ssp126"` | Low emissions – sustainable development pathway |
-| `"ssp245"` | Intermediate emissions – middle of the road |
-| `"ssp370"` | High emissions – regional rivalry |
-| `"ssp585"` | Very high emissions – fossil-fuelled development |
- 
-### Common Variables
- 
-| Variable | Description |
-|----------|-------------|
-| `"tas"`    | Near-surface air temperature (2m) |
-| `"tasmax"` | Daily maximum temperature |
-| `"tasmin"` | Daily minimum temperature |
-| `"pr"`     | Precipitation |
-| `"huss"`   | Specific humidity |
-| `"psl"`    | Sea level pressure |
-| `"sfcWind"`| Wind speed |
 
-### Supported Models
+## Compare Multiple Scenarios
 
-`cmip6r` supports 29 CMIP6 models including `AWI-CM-1-1-MR`, `CanESM5`, `CESM2`, `MPI-ESM1-2-LR`, and more. Run `?get_cmip6_data` for the full list.
+Download and compare multiple SSP scenarios in a single plot:
 
---- 
+```r
+# Download historical + three SSP scenarios
+hist   <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
+                          scenario = "historical", start_year = 1980, end_year = 2014,
+                          months = 1:12, region = c(9, 14, 47, 51),
+                          temporal_resolution = "monthly")
+
+ssp126 <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
+                          scenario = "ssp126", start_year = 2015, end_year = 2100,
+                          months = 1:12, region = c(9, 14, 47, 51),
+                          temporal_resolution = "monthly")
+
+ssp245 <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
+                          scenario = "ssp245", start_year = 2015, end_year = 2100,
+                          months = 1:12, region = c(9, 14, 47, 51),
+                          temporal_resolution = "monthly")
+
+ssp585 <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
+                          scenario = "ssp585", start_year = 2015, end_year = 2100,
+                          months = 1:12, region = c(9, 14, 47, 51),
+                          temporal_resolution = "monthly")
+
+# Read files
+df_hist   <- read_cmip6(hist$file)
+df_ssp126 <- read_cmip6(ssp126$file)
+df_ssp245 <- read_cmip6(ssp245$file)
+df_ssp585 <- read_cmip6(ssp585$file)
+
+# Plot all scenarios together
+p <- plot_timeseries(
+  df_hist, df_ssp126, df_ssp245, df_ssp585,
+  title = "Annual Mean of Daily Maximum Temperature\nBavaria (1980-2100)"
+)
+
+# Customize x-axis breaks
+p + scale_x_date(
+  breaks = seq(as.Date("1980-01-01"), as.Date("2100-01-01"), by = "10 years"),
+  labels = scales::label_date("%Y")
+)
+```
+
+![Annual Maximum Temperature Bavaria](man/figures/bavaria_tasmax_1980_2100.png)
+
+---
+
+## Precipitation Example
+
+```r
+df_hist_pr   <- read_cmip6(hist_pr$file)
+df_ssp126_pr <- read_cmip6(ssp126_pr$file)
+df_ssp245_pr <- read_cmip6(ssp245_pr$file)
+df_ssp585_pr <- read_cmip6(ssp585_pr$file)
+
+p_precip <- plot_timeseries(
+  df_hist_pr, df_ssp126_pr, df_ssp245_pr, df_ssp585_pr,
+  title = "Annual Precipitation\nBavaria (1980-2100)"
+)
+
+p_precip + scale_x_date(
+  breaks = seq(as.Date("1980-01-01"), as.Date("2100-01-01"), by = "10 years"),
+  labels = scales::label_date("%Y")
+)
+```
+
+![Annual Precipitation Bavaria](man/figures/bavaria_precip_1980_2100.png)
+
+---
+
 ## Plot Options
- 
+
 `plot_timeseries()` offers several customization options:
- 
+
 ```r
 plot_timeseries(
   df_ssp245, df_ssp585,
-  aggregation      = "mean",      # "mean", "max", "min", "median"
-  time_aggregation = "annual",    # "auto", "annual", "monthly", "none"
-  show_smooth      = TRUE,        # linear trend line
-  show_ci          = TRUE,        # 95% confidence band
-  theme            = "light"      # "default" (dark) or "light"
+  aggregation      = "mean",    # "mean", "max", "min", "median"
+  time_aggregation = "annual",  # "auto", "annual", "monthly", "none"
+  show_smooth      = TRUE,      # LOESS trend line
+  show_ci          = TRUE,      # 95% confidence band
+  theme            = "light"    # "default" or "light"
 )
 ```
+
 ### Time aggregation behavior
 
 When `time_aggregation = "auto"`, the function automatically selects the aggregation level:
 
-- **> 20 years** → annual aggregation  
-- **2–20 years** → monthly aggregation  
-- **< 2 years** → daily (no aggregation)
+- **> 20 years** → annual aggregation
+- **2–20 years** → monthly aggregation
+- **< 2 years** → no aggregation
+
+### Themes
+
+Two built-in themes are available:
+
+```r
+# Default theme
+p + theme_cmip6()
+
+# Light theme (warm off-white background)
+p + theme_cmip6_light()
+
+# Preview mode for RStudio (smaller fonts)
+p + theme_cmip6(preview = TRUE)
+```
+
+![Light theme example](man/figures/bavaria_tasmax_light.png)
+
 ---
+
+## Saving Plots
+
+```r
+# Set DPI before saving for correct font rendering
+showtext::showtext_opts(dpi = 300)
+
+ggsave("my_plot.png", plot = p, width = 8, height = 5, dpi = 300)
+
+showtext::showtext_opts(dpi = 96)  # reset for RStudio preview
+```
+
+---
+
+## Available Scenarios, Variables & Models
+
+Use `cmip6_info()` to display all available options:
+
+```r
+cmip6_info()            # show everything
+cmip6_info("variables") # show available variables
+cmip6_info("scenarios") # show available scenarios
+cmip6_info("models")    # show available models
+cmip6_info("example")   # show a usage example
+```
+
+### SSP Scenarios
+
+| Scenario       | Description                              |
+|----------------|------------------------------------------|
+| `"historical"` | Historical simulation (1850–2014)        |
+| `"ssp126"`     | Low emissions – sustainable development  |
+| `"ssp245"`     | Intermediate emissions – middle of road  |
+| `"ssp370"`     | High emissions – regional rivalry        |
+| `"ssp585"`     | Very high emissions – fossil-fuelled     |
+
+### Common Variables
+
+| Variable    | Description                        |
+|-------------|------------------------------------|
+| `"tas"`     | Near-surface air temperature       |
+| `"tasmax"`  | Daily maximum temperature          |
+| `"tasmin"`  | Daily minimum temperature          |
+| `"pr"`      | Precipitation                      |
+| `"hurs"`    | Near-surface relative humidity     |
+| `"sfcWind"` | Near-surface wind speed            |
+| `"rsds"`    | Surface downwelling shortwave radiation |
+
+### Supported Models
+
+`cmip6r` supports 57 CMIP6 models including `AWI-CM-1-1-MR`, `CanESM5`, `CESM2`,
+`MPI-ESM1-2-LR`, `EC-Earth3`, and more. Run `cmip6_info("models")` for the full list.
+
+---
+
 ## Function Reference
 
-| Function | Description |
-|---|---|
-| `set_cmip6_dir()` | Set the directory for downloaded data |
-| `get_cmip6_data()` | Download CMIP6 data from CDS |
-| `read_cmip6()` | Read a `.nc` file into a data frame |
+| Function            | Description                                  |
+|---------------------|----------------------------------------------|
+| `set_cmip6_dir()`   | Set the directory for downloaded data        |
+| `get_cmip6_data()`  | Download CMIP6 data from CDS                 |
+| `read_cmip6()`      | Read a `.nc` file into a data frame          |
 | `plot_timeseries()` | Plot a time series for one or more scenarios |
-| `theme_cmip6()` | Default ggplot2 theme |
-| `theme_cmip6_light()` | Light ggplot2 theme |
+| `cmip6_info()`      | Display available variables, scenarios, models |
+| `theme_cmip6()`     | Default ggplot2 theme                        |
+| `theme_cmip6_light()` | Light ggplot2 theme                        |
 
 ---
+
 ## Citation
  
 If you use `cmip6r` in your research, please cite:
