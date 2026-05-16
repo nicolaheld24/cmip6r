@@ -2,19 +2,22 @@
 % Please edit documentation in R/resolve_region.R
 \name{resolve_region}
 \alias{resolve_region}
-\title{Resolve Region Specification}
+\title{Resolve Region Input to a Standardised Format}
 \usage{
 resolve_region(region)
 }
 \arguments{
-\item{region}{Either \code{"global"} or a numeric vector
-\code{c(lon_min, lon_max, lat_min, lat_max)}.}
+\item{region}{Character or numeric vector. Either \code{"global"} for global
+coverage, or a bounding box as \code{c(lon_min, lon_max, lat_min, lat_max)}.
+Example: \code{c(9, 14, 47, 51)} for Bavaria.}
 }
 \value{
-A list with \code{type} and optionally \code{lon_min}, \code{lon_max},
-\code{lat_min}, \code{lat_max}.
+A named list with element \code{type} set to either \code{"global"}
+or \code{"bbox"}. For bounding boxes, additionally contains \code{lon_min},
+\code{lon_max}, \code{lat_min}, and \code{lat_max}.
 }
 \description{
-Resolve Region Specification
+Converts a region input (either a string or a numeric bounding box) into
+a standardised list used by \code{build_request()}.
 }
 \keyword{internal}

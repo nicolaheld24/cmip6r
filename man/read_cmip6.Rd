@@ -2,42 +2,48 @@
 % Please edit documentation in R/read_cmip6.R
 \name{read_cmip6}
 \alias{read_cmip6}
-\title{Read CMIP6 NetCDF File into a Data Frame}
+\title{Read a CMIP6 NetCDF File into a Data Frame}
 \usage{
-read_cmip6(file, convert_units = TRUE, scenario = NULL)
+read_cmip6(
+  file,
+  convert_units = TRUE,
+  scenario = NULL,
+  temporal_resolution = "monthly"
+)
 }
 \arguments{
-\item{file}{Character. Path to the \code{.nc} file to read.}
+\item{file}{Character. Path to a NetCDF (.nc) file.}
 
-\item{convert_units}{Logical. If \code{TRUE} (default), converts temperature variables
-(\code{tas}, \code{tasmax}, \code{tasmin}) from Kelvin or Fahrenheit to degrees Celsius.}
+\item{convert_units}{Logical. Whether to convert units automatically.
+Temperature is converted from Kelvin to °C, precipitation from
+\code{kg m-2 s-1} to \code{mm/day} or \code{mm/month}. Default is \code{TRUE}.}
 
-\item{scenario}{Character. Optional scenario label (e.g. \code{"ssp245"}). Used to
-identify the scenario in \code{plot_timeseries()}. Default: \code{NULL} (stored as \code{"unknown"}).}
+\item{scenario}{Character. Optional scenario label to override the one
+detected from the file. If \code{NULL} (default), the scenario is read
+from the file's \code{experiment_id} attribute.}
+
+\item{temporal_resolution}{Character. Deprecated - temporal resolution is
+now detected automatically from the file. Default is \code{"monthly"}.}
 }
 \value{
-A data frame with columns:
+A data frame with columns \code{lon}, \code{lat}, \code{time},
+\code{value}, \code{scenario}, and \code{model}. The following attributes
+are attached:
 \describe{
-\item{lon}{Longitude in degrees east.}
-\item{lat}{Latitude in degrees north.}
-\item{time}{Date of the observation as \code{Date} object.}
-\item{value}{Climate variable value.}
-\item{scenario}{Scenario label.}
-}
-The data frame also carries two attributes:
-\describe{
-\item{variable}{Name of the climate variable (e.g. \code{"tas"}).}
-\item{units}{Unit of the climate variable after conversion (e.g. \code{"°C"}).}
+\item{variable}{The detected climate variable name (e.g. \code{"tas"}).}
+\item{units}{The unit of the values after conversion (e.g. \code{"°C"}).}
+\item{temporal_resolution}{Either \code{"monthly"} or \code{"daily"}.}
 }
 }
 \description{
-Reads a CMIP6 NetCDF file and converts it into a tidy long-format data frame
-with columns for longitude, latitude, time, value, and scenario.
+Reads a CMIP6 NetCDF file and returns a tidy data frame with columns for
+longitude, latitude, time, value, scenario, and model. Model name and
+scenario are automatically extracted from the file's global attributes.
+Unit conversion is applied automatically for known variables.
 }
 \examples{
 \dontrun{
-df <- read_cmip6("AWI-CM-1-1-MR_tas_ssp245.nc", scenario = "ssp245")
+df <- read_cmip6("tasmax_Amon_MPI-ESM1-2-LR_ssp585_r1i1p1f1_gn_20150116-21001216.nc")
 head(df)
 }
-
 }

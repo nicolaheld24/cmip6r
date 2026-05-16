@@ -1,10 +1,16 @@
-#' Resolve Region Specification
+#' Resolve Region Input to a Standardised Format
 #'
-#' @param region Either `"global"` or a numeric vector
-#'   `c(lon_min, lon_max, lat_min, lat_max)`.
+#' @description
+#' Converts a region input (either a string or a numeric bounding box) into
+#' a standardised list used by \code{build_request()}.
 #'
-#' @return A list with `type` and optionally `lon_min`, `lon_max`,
-#'   `lat_min`, `lat_max`.
+#' @param region Character or numeric vector. Either \code{"global"} for global
+#'   coverage, or a bounding box as \code{c(lon_min, lon_max, lat_min, lat_max)}.
+#'   Example: \code{c(9, 14, 47, 51)} for Bavaria.
+#'
+#' @return A named list with element \code{type} set to either \code{"global"}
+#'   or \code{"bbox"}. For bounding boxes, additionally contains \code{lon_min},
+#'   \code{lon_max}, \code{lat_min}, and \code{lat_max}.
 #' @keywords internal
 
 resolve_region <- function(region) {

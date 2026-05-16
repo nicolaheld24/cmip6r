@@ -7,17 +7,21 @@
 resolve_time(scenario, start_year = NULL, end_year = NULL)
 }
 \arguments{
-\item{scenario}{Character. One of \code{"historical"}, \code{"ssp126"}, \code{"ssp245"},
-\code{"ssp370"}, \code{"ssp585"}.}
+\item{scenario}{Character. Emissions scenario (e.g. \code{"ssp585"},
+\code{"historical"}).}
 
-\item{start_year}{Integer or NULL. Start year. Defaults to scenario minimum.}
+\item{start_year}{Integer or \code{NULL}. First year of the requested period.
+Defaults to \code{1850} for historical, \code{2015} for SSP scenarios.}
 
-\item{end_year}{Integer or NULL. End year. Defaults to scenario maximum.}
+\item{end_year}{Integer or \code{NULL}. Last year of the requested period.
+Defaults to \code{2015} for historical, \code{2100} for SSP scenarios.}
 }
 \value{
-A list with \code{start_year} and \code{end_year}.
+A named list with elements \code{start_year} and \code{end_year}.
 }
 \description{
-Resolve Time Range for a CMIP6 Scenario
+Validates and returns the start and end year for a given CMIP6 scenario.
+If no years are provided, defaults to the full available time range
+for the selected scenario.
 }
 \keyword{internal}

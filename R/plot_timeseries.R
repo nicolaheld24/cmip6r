@@ -1,52 +1,46 @@
-#' Plot CMIP6 Climate Time Series
+#' Plot CMIP6 Climate Scenario Time Series
 #'
 #' @description
-#' Creates a time series plot of CMIP6 climate data for one or more scenarios.
-#' Automatically aggregates daily data to monthly or annual means depending on
-#' the length of the time series.
+#' Creates a time series plot for one or more CMIP6 climate scenarios.
+#' Supports automatic spatial and temporal aggregation, unit conversion,
+#' and optional LOESS trend lines with confidence intervals.
 #'
-#' @param ... One or more data frames created by `read_cmip6()`. All data frames
-#'   must contain the same climate variable.
-#' @param aggregation Character. Spatial aggregation function applied across all
-#'   grid points per time step. One of `"mean"` (default), `"max"`, `"min"`, `"median"`.
-#' @param title Character. Plot title. If `NULL` (default), a title is generated
-#'   automatically from the variable name and aggregation method.
-#' @param show_smooth Logical. If `TRUE` (default), adds a linear trend line
-#'   for each scenario.
-#' @param time_aggregation Character. Temporal aggregation level. One of `"auto"`
-#'   (default), `"annual"`, `"monthly"`, `"none"`. When `"auto"`, the aggregation
-#'   is chosen based on the length of the time series: annual for > 20 years,
-#'   monthly for 3-20 years, none for < 3 years.
-#' @param show_ci Logical. If `TRUE` (default), adds a 95% confidence band around
-#'   the trend line.
-#' @param theme Character. Plot theme. Either `"default"` (dark) or `"light"`.
+#' @param ... One or more data frames returned by \code{read_cmip6()}.
+#'   All data frames must contain the same climate variable.
+#' @param aggregation Character. Spatial aggregation method. One of
+#'   \code{"mean"} (default), \code{"max"}, \code{"min"}, or \code{"median"}.
+#' @param title Character. Plot title. If \code{NULL} (default), a title is
+#'   generated automatically from the variable metadata.
+#' @param show_smooth Logical. Whether to add a LOESS trend line. Default is \code{TRUE}.
+#' @param time_aggregation Character. Temporal aggregation level. One of
+#'   \code{"auto"} (default), \code{"annual"}, \code{"monthly"}, or \code{"none"}.
+#'   \code{"auto"} selects annual aggregation for time series longer than 20 years.
+#' @param show_ci Logical. Whether to show the confidence interval around the
+#'   trend line. Default is \code{TRUE}.
+#' @param theme Character. Plot theme. Either \code{"default"} or \code{"light"}.
+#' @param x_breaks Character. Interval for x-axis breaks. Default is \code{"10 years"}.
 #'
-#' @return A `ggplot2` object.
+#' @return A \code{ggplot2} object.
+#' @export
 #'
 #' @examples
 #' \dontrun{
-#' df_ssp245 <- read_cmip6("tas_ssp245.nc", scenario = "ssp245")
-#' df_ssp585 <- read_cmip6("tas_ssp585.nc", scenario = "ssp585")
-#'
-#' # Plot two scenarios
-#' plot_timeseries(df_ssp245, df_ssp585,
-#'                 title = "Near-Surface Air Temperature – Bavaria")
-#'
-#' # Without trend line
-#' plot_timeseries(df_ssp245, show_smooth = FALSE)
-#'
-#' # Force annual aggregation
-#' plot_timeseries(df_ssp245, df_ssp585, time_aggregation = "annual")
+#' p <- plot_timeseries(
+#'   df_historical, df_ssp126, df_ssp585,
+#'   title = "Monthly Maximum Temperature\nBavaria (1980-2100)",
+#'   theme = "light"
+#' )
+#' print(p)
 #' }
-#'
-#' @importFrom stats median
-#' @export
+
+
 
 plot_timeseries <- function(..., aggregation = "mean", title = NULL,
                             show_smooth = TRUE,
                             time_aggregation = "auto",
                             show_ci = TRUE,
-                            theme = "default") {
+                            theme = "default",
+                            x_breaks = "10 years") {
 
   # 1. Collect all data.frames
   dfs <- list(...)
@@ -64,17 +58,18 @@ plot_timeseries <- function(..., aggregation = "mean", title = NULL,
 
   # 3. Aggregation function
   agg_fn <- switch(aggregation,
-     "mean"   = function(x) mean(x, na.rm = TRUE),
-     "max"    = function(x) max(x, na.rm = TRUE),
-     "min"    = function(x) min(x, na.rm = TRUE),
-     "median" = function(x) median(x, na.rm = TRUE),
-     stop("Invalid aggregation. Choose: 'mean', 'max', 'min', 'median'")
+                   "mean"   = function(x) mean(x, na.rm = TRUE),
+                   "max"    = function(x) max(x, na.rm = TRUE),
+                   "min"    = function(x) min(x, na.rm = TRUE),
+                   "median" = function(x) median(x, na.rm = TRUE),
+                   stop("Invalid aggregation. Choose: 'mean', 'max', 'min', 'median'")
   )
 
-  # 4. Aggregate spatially per time step and scenario
+  # 4a. Aggregate spatially per time step and scenario
   combined <- dplyr::bind_rows(dfs) |>
     dplyr::group_by(time, scenario) |>
-    dplyr::summarise(value = agg_fn(value), .groups = "drop")
+    dplyr::summarise(value = agg_fn(value), .groups = "drop") |>
+    dplyr::arrange(scenario, time)
 
   # 4b. Auto time aggregation based on time range
   if (time_aggregation == "auto") {
@@ -94,9 +89,14 @@ plot_timeseries <- function(..., aggregation = "mean", title = NULL,
     combined <- combined |>
       dplyr::mutate(year = format(time, "%Y")) |>
       dplyr::group_by(year, scenario) |>
-      dplyr::summarise(value = mean(value, na.rm = TRUE), .groups = "drop") |>
+      dplyr::summarise(
+        value = if (var_name == "pr") sum(value, na.rm = TRUE) else mean(value, na.rm = TRUE),
+        .groups = "drop"
+      ) |>
       dplyr::mutate(time = as.Date(paste0(year, "-07-01"))) |>
       dplyr::select(-year)
+
+    if (var_name == "pr") units <- "mm/year"
 
   } else if (time_aggregation == "monthly") {
     combined <- combined |>
@@ -106,6 +106,13 @@ plot_timeseries <- function(..., aggregation = "mean", title = NULL,
       dplyr::mutate(time = as.Date(paste0(month, "-15"))) |>
       dplyr::select(-month)
   }
+
+  trend_data <- combined |>
+    dplyr::mutate(
+      year = format(time, "%Y"),
+      time = as.Date(paste0(year, "-07-01"))
+    ) |>
+    dplyr::select(-year)
 
   # 5. Color palettes
   scenario_colors <- c(
@@ -134,7 +141,7 @@ plot_timeseries <- function(..., aggregation = "mean", title = NULL,
   all_colors <- c(colors, t_colors)
   all_linetypes <- c(
     stats::setNames(rep("solid", length(present_scenarios)), present_scenarios),
-    stats::setNames(rep("dashed",    length(present_scenarios)), paste0(present_scenarios, " (trend)"))
+    stats::setNames(rep("solid", length(present_scenarios)), paste0(present_scenarios, " (trend)"))
   )
 
   # 7. Plot title
@@ -145,29 +152,28 @@ plot_timeseries <- function(..., aggregation = "mean", title = NULL,
   # 8. Base plot
   p <- ggplot2::ggplot(combined, ggplot2::aes(x = time, y = value)) +
     ggplot2::geom_line(
-      ggplot2::aes(color = scenario, linetype = scenario),
+      ggplot2::aes(color = scenario, linetype = scenario, group = scenario),
       linewidth = 0.7,
-      alpha = 0.6
+      alpha = 0.4
     )
 
   # 9. Optionally add trend line
   if (show_smooth) {
     p <- p +
       ggplot2::geom_smooth(
+        data = trend_data,
         ggplot2::aes(
           color    = paste0(scenario, " (trend)"),
           linetype = paste0(scenario, " (trend)"),
           fill     = scenario
         ),
-        method    = "lm",
+        linetype  = "solid",
+        span      = 0.75,
+        method    = "loess",
         se        = show_ci,
         linewidth = 0.8,
         alpha     = 0.15,
         show.legend = TRUE
-      ) +
-      ggplot2::scale_fill_manual(
-        values = colors,
-        guide  = "none"
       )
   }
 
@@ -175,15 +181,26 @@ plot_timeseries <- function(..., aggregation = "mean", title = NULL,
   p <- p +
     ggplot2::scale_color_manual(values = all_colors, name = "Scenario") +
     ggplot2::scale_linetype_manual(values = all_linetypes, name = "Scenario") +
+    ggplot2::scale_fill_manual(values = colors, guide = "none") +
+    ggplot2::guides(
+      color    = ggplot2::guide_legend(override.aes = list(linetype = "solid", linewidth = 0.8)),
+      linetype = "none",
+      fill     = "none"
+    ) +
     ggplot2::labs(
       title = title,
       x     = "Year",
       y     = paste0(meta$label, " (", units, ")")
-    ) +
-    if (theme == "light") theme_cmip6_light() else theme_cmip6()
+    )
+
+  p <- p + if (theme == "light") theme_cmip6_light() else theme_cmip6()
 
   return(p)
 }
+
+
+
+
 
 
 

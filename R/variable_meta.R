@@ -1,21 +1,29 @@
-#' Get Metadata for a CMIP6 Variable or Scenario
+#' Retrieve Metadata for CMIP6 Variables and Scenarios
 #'
-#' @param var_name Character or NULL. Variable name (e.g. `"tas"`, `"pr"`).
-#' @param scenario Character or NULL. Scenario key (e.g. `"ssp245"`).
+#' @description
+#' Returns display metadata (label, color, unit) for a given climate variable,
+#' or a formatted label for a given scenario. Used internally by
+#' \code{plot_timeseries()} for axis labels and color scales.
 #'
-#' @return A list with `label`, `color`, and `unit` for variables,
-#'   or a formatted scenario label string.
+#' @param var_name Character or \code{NULL}. Climate variable short name
+#'   (e.g. \code{"tas"}, \code{"pr"}). If not \code{NULL}, variable metadata
+#'   is returned.
+#' @param scenario Character or \code{NULL}. Scenario identifier
+#'   (e.g. \code{"ssp585"}, \code{"historical"}). If not \code{NULL}, a
+#'   formatted scenario label is returned.
+#'
+#' @return If \code{var_name} is provided, a named list with elements
+#'   \code{label}, \code{color}, and \code{unit}. If \code{scenario} is
+#'   provided, a character string with the formatted scenario label
+#'   (e.g. \code{"SSP5-8.5"}).
 #' @keywords internal
 
 variable_meta <- function(var_name = NULL, scenario = NULL) {
   meta <- list(
     tas     = list(label = "Near-Surface Air Temperature",   color = "#2166ac", unit = "\u00b0C"),
-    tasmin  = list(label = "Daily Minimum Temperature",      color = "#4dac26", unit = "\u00b0C"),
-    tasmax  = list(label = "Daily Maximum Temperature",      color = "#d73027", unit = "\u00b0C"),
-    pr      = list(label = "Precipitation",                  color = "#1a9850", unit = "mm/day"),
-    huss    = list(label = "Near-Surface Specific Humidity", color = "#8073ac", unit = "kg/kg"),
-    psl     = list(label = "Sea Level Pressure",             color = "#e08214", unit = "hPa"),
-    sfcWind = list(label = "Near-Surface Wind Speed",        color = "#542788", unit = "m/s")
+    tasmin  = list(label = "Minimum Temperature",      color = "#4dac26", unit = "\u00b0C"),
+    tasmax  = list(label = "Maximum Temperature",      color = "#d73027", unit = "\u00b0C"),
+    pr      = list(label = "Precipitation Sum",                  color = "#1a9850", unit = "mm/month")
   )
 
   # Scenario labels

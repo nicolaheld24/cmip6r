@@ -1,67 +1,56 @@
-#' Light ggplot2 Theme for cmip6r Plots
+#' Light Theme for CMIP6 Plots
 #'
 #' @description
 #' An alternative light-styled ggplot2 theme with a warm background,
 #' markdown-enabled titles and a clean minimal look.
 #' Requires the `ggtext` package for markdown title rendering.
 #'
-#' @param base_size Numeric. Base font size. Default: `11`.
-#' @param base_family Character. Font family. Default: `"lora"`.
+#' @param base_size Numeric. Base font size in points. Default is \code{10}.
+#' @param base_family Character. Font family. Default is \code{"lora"}.
+#' @param preview Logical. If \code{TRUE}, reduces font size and sets DPI to
+#'   96 for better display in the RStudio plot pane. If \code{FALSE} (default),
+#'   uses full size and 300 DPI for export.
 #'
-#' @return A ggplot2 theme object.
+#' @return A \code{ggplot2} theme object.
+#' @export
 #'
 #' @examples
 #' \dontrun{
-#' library(ggplot2)
-#' ggplot(mtcars, aes(x = wt, y = mpg)) +
-#'   geom_point() +
-#'   theme_cmip6_light()
+#' p <- plot_timeseries(df_ssp126, df_ssp585)
+#' p + theme_cmip6_light()
 #' }
-#'
-#' @export
 
-
-theme_cmip6_light <- function(base_size = 11, base_family = "lora") {
-
-  # Load font if not already loaded
+theme_cmip6_light <- function(base_size = 10, base_family = "lora", preview = FALSE) {
   if (!("lora" %in% sysfonts::font_families())) {
     sysfonts::font_add_google("Lora", "lora")
   }
   showtext::showtext_auto(enable = TRUE)
-
+  if (preview) {
+    actual_size <- base_size * 0.9
+    showtext::showtext_opts(dpi = 96)
+  } else {
+    actual_size <- base_size
+    showtext::showtext_opts(dpi = 300)
+  }
   bg      <- "#F4F5F1"
   txt_col <- "black"
-
-  ggplot2::theme_minimal(base_size = base_size, base_family = base_family) +
+  ggplot2::theme_minimal(base_size = actual_size, base_family = base_family) +
     ggplot2::theme(
-      # Title & subtitle
-      plot.title            = ggtext::element_markdown(
-        hjust = 0.5, size = 16, color = txt_col,
-        lineheight = 0.8, face = "bold",
-        margin = ggplot2::margin(20, 0, 30, 0)),
-      plot.subtitle         = ggtext::element_markdown(
-        hjust = 0.5, size = 11, color = txt_col,
-        lineheight = 1,
-        margin = ggplot2::margin(10, 0, 30, 0)),
-      plot.caption          = ggtext::element_markdown(
-        hjust = 0.5, size = 8, color = txt_col,
-        lineheight = 1.2,
-        margin = ggplot2::margin(30, 0, 0, 0)),
-      plot.caption.position = "plot",
-      # Background
-      plot.background       = ggplot2::element_rect(color = bg, fill = bg),
-      panel.background      = ggplot2::element_rect(color = bg, fill = bg),
-      # Axes
-      axis.title            = ggplot2::element_text(size = 9, color = txt_col),
-      axis.text             = ggplot2::element_text(size = 8, color = txt_col),
-      # Grid
-      panel.grid.minor      = ggplot2::element_blank(),
-      panel.grid.major      = ggplot2::element_line(color = "#E0E0D8"),
-      # Legend
-      legend.position       = "bottom",
-      legend.title          = ggplot2::element_blank(),
-      legend.text           = ggplot2::element_text(size = 9),
-      # Margin
-      plot.margin           = ggplot2::margin(10, 10, 10, 10)
+      plot.title           = ggplot2::element_text(
+        face = "bold", hjust = 0.5, size = actual_size * 1.5,
+        lineheight = 1.2, color = txt_col),
+      plot.title.position  = "plot",
+      plot.background      = ggplot2::element_rect(color = bg, fill = bg),
+      panel.background     = ggplot2::element_rect(color = bg, fill = bg),
+      panel.grid.minor     = ggplot2::element_blank(),
+      panel.grid.major     = ggplot2::element_line(color = "#E0E0D8"),
+      axis.text            = ggplot2::element_text(size = actual_size * 0.9, color = txt_col),
+      axis.title           = ggplot2::element_text(size = actual_size * 1.0, color = txt_col),
+      legend.position      = "bottom",
+      legend.justification = "center",
+      legend.title         = ggplot2::element_blank(),
+      legend.text          = ggplot2::element_text(size = actual_size * 1.0, color = txt_col),
+      legend.spacing.x     = ggplot2::unit(0.3, "cm"),
+      plot.margin          = ggplot2::margin(10, 10, 10, 10)
     )
 }

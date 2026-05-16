@@ -15,8 +15,13 @@ Imports:
     ncdf4,
     dplyr,
     ggplot2,
-    ggtext,
+    scales,
     showtext,
-    sysfonts
+    sysfonts,
+    stats,
+    utils
 URL: https://github.com/nicolaheld24/cmip6r
 BugReports: https://github.com/nicolaheld24/cmip6r/issues
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

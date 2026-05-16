@@ -2,28 +2,30 @@
 % Please edit documentation in R/theme_cmip6.R
 \name{theme_cmip6}
 \alias{theme_cmip6}
-\title{ggplot2 Theme for cmip6r Plots}
+\title{Default Theme for CMIP6 Plots}
 \usage{
-theme_cmip6(base_size = 13, base_family = "lora")
+theme_cmip6(base_size = 10, base_family = "lora", preview = FALSE)
 }
 \arguments{
-\item{base_size}{Numeric. Base font size. Default: \code{13}.}
+\item{base_size}{Numeric. Base font size in points. Default is \code{10}.}
 
-\item{base_family}{Character. Font family. Default: \code{"lora"}.}
+\item{base_family}{Character. Font family. Default is \code{"lora"}.}
+
+\item{preview}{Logical. If \code{TRUE}, reduces font size and sets DPI to
+96 for better display in the RStudio plot pane. If \code{FALSE} (default),
+uses full size and 300 DPI for export.}
 }
 \value{
-A ggplot2 theme object.
+A \code{ggplot2} theme object.
 }
 \description{
-A clean minimal ggplot2 theme used as default for all cmip6r plots.
-Automatically loads the Lora Google Font via \code{showtext}.
+A minimal ggplot2 theme for CMIP6 climate plots using the Lora Google Font.
+Optimised for high-resolution export at 300 DPI. Use \code{preview = TRUE}
+for a better in-session preview in RStudio.
 }
 \examples{
 \dontrun{
-library(ggplot2)
-ggplot(mtcars, aes(x = wt, y = mpg)) +
-  geom_point() +
-  theme_cmip6()
+p <- plot_timeseries(df_ssp126, df_ssp585)
+p + theme_cmip6()
 }
-
 }

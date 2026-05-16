@@ -2,17 +2,20 @@
 % Please edit documentation in R/validate_model.R
 \name{validate_model}
 \alias{validate_model}
-\title{Validate CMIP6 Model Name}
+\title{Validate a CMIP6 Model Name}
 \usage{
 validate_model(model)
 }
 \arguments{
-\item{model}{Character. Model name to validate.}
+\item{model}{Character. CMIP6 model name to validate (e.g. \code{"MPI-ESM1-2-LR"}).
+See \code{cmip6_info("models")} for all known models.}
 }
 \value{
-Invisibly returns \code{TRUE} if valid, otherwise throws an error.
+Invisibly returns \code{TRUE}.
 }
 \description{
-Validate CMIP6 Model Name
+Checks whether a given model name is in the list of known CMIP6 models.
+Issues a warning if the model is not recognised, but does not stop execution.
+The CDS API will return an error if the model is truly unavailable.
 }
 \keyword{internal}

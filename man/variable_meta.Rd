@@ -2,20 +2,28 @@
 % Please edit documentation in R/variable_meta.R
 \name{variable_meta}
 \alias{variable_meta}
-\title{Get Metadata for a CMIP6 Variable or Scenario}
+\title{Retrieve Metadata for CMIP6 Variables and Scenarios}
 \usage{
 variable_meta(var_name = NULL, scenario = NULL)
 }
 \arguments{
-\item{var_name}{Character or NULL. Variable name (e.g. \code{"tas"}, \code{"pr"}).}
+\item{var_name}{Character or \code{NULL}. Climate variable short name
+(e.g. \code{"tas"}, \code{"pr"}). If not \code{NULL}, variable metadata
+is returned.}
 
-\item{scenario}{Character or NULL. Scenario key (e.g. \code{"ssp245"}).}
+\item{scenario}{Character or \code{NULL}. Scenario identifier
+(e.g. \code{"ssp585"}, \code{"historical"}). If not \code{NULL}, a
+formatted scenario label is returned.}
 }
 \value{
-A list with \code{label}, \code{color}, and \code{unit} for variables,
-or a formatted scenario label string.
+If \code{var_name} is provided, a named list with elements
+\code{label}, \code{color}, and \code{unit}. If \code{scenario} is
+provided, a character string with the formatted scenario label
+(e.g. \code{"SSP5-8.5"}).
 }
 \description{
-Get Metadata for a CMIP6 Variable or Scenario
+Returns display metadata (label, color, unit) for a given climate variable,
+or a formatted label for a given scenario. Used internally by
+\code{plot_timeseries()} for axis labels and color scales.
 }
 \keyword{internal}

@@ -1,11 +1,18 @@
 #' Resolve Time Range for a CMIP6 Scenario
 #'
-#' @param scenario Character. One of `"historical"`, `"ssp126"`, `"ssp245"`,
-#'   `"ssp370"`, `"ssp585"`.
-#' @param start_year Integer or NULL. Start year. Defaults to scenario minimum.
-#' @param end_year Integer or NULL. End year. Defaults to scenario maximum.
+#' @description
+#' Validates and returns the start and end year for a given CMIP6 scenario.
+#' If no years are provided, defaults to the full available time range
+#' for the selected scenario.
 #'
-#' @return A list with `start_year` and `end_year`.
+#' @param scenario Character. Emissions scenario (e.g. \code{"ssp585"},
+#'   \code{"historical"}).
+#' @param start_year Integer or \code{NULL}. First year of the requested period.
+#'   Defaults to \code{1850} for historical, \code{2015} for SSP scenarios.
+#' @param end_year Integer or \code{NULL}. Last year of the requested period.
+#'   Defaults to \code{2015} for historical, \code{2100} for SSP scenarios.
+#'
+#' @return A named list with elements \code{start_year} and \code{end_year}.
 #' @keywords internal
 
 resolve_time <- function(scenario, start_year = NULL, end_year = NULL) {

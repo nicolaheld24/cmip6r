@@ -12,16 +12,12 @@ load_cds_data(request, output_file)
 \item{output_file}{Character. Path to save the downloaded \code{.nc} file.}
 }
 \value{
-Character. Path to the downloaded file.
+Character. Path to the downloaded and extracted NetCDF file.
 }
 \description{
-Download Data from the CDS API
+Downloads CMIP6 data from the Copernicus Climate Data Store using the
+Python \code{cdsapi} package via \code{reticulate}. Automatically installs
+\code{cdsapi} if not available. The downloaded ZIP archive is extracted
+and the resulting NetCDF file is returned.
 }
-\keyword{Download}
-\keyword{ZIP}
-\keyword{dem}
-\keyword{entpacken}
 \keyword{internal}
-\keyword{load_cds_data.R}
-\keyword{nach}
-\keyword{–}

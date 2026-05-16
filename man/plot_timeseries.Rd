@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_timeseries.R
 \name{plot_timeseries}
 \alias{plot_timeseries}
-\title{Plot CMIP6 Climate Time Series}
+\title{Plot CMIP6 Climate Scenario Time Series}
 \usage{
 plot_timeseries(
   ...,
@@ -11,54 +11,48 @@ plot_timeseries(
   show_smooth = TRUE,
   time_aggregation = "auto",
   show_ci = TRUE,
-  theme = "default"
+  theme = "default",
+  x_breaks = "10 years"
 )
 }
 \arguments{
-\item{...}{One or more data frames created by \code{read_cmip6()}. All data frames
-must contain the same climate variable.}
+\item{...}{One or more data frames returned by \code{read_cmip6()}.
+All data frames must contain the same climate variable.}
 
-\item{aggregation}{Character. Spatial aggregation function applied across all
-grid points per time step. One of \code{"mean"} (default), \code{"max"}, \code{"min"}, \code{"median"}.}
+\item{aggregation}{Character. Spatial aggregation method. One of
+\code{"mean"} (default), \code{"max"}, \code{"min"}, or \code{"median"}.}
 
-\item{title}{Character. Plot title. If \code{NULL} (default), a title is generated
-automatically from the variable name and aggregation method.}
+\item{title}{Character. Plot title. If \code{NULL} (default), a title is
+generated automatically from the variable metadata.}
 
-\item{show_smooth}{Logical. If \code{TRUE} (default), adds a linear trend line
-for each scenario.}
+\item{show_smooth}{Logical. Whether to add a LOESS trend line. Default is \code{TRUE}.}
 
-\item{time_aggregation}{Character. Temporal aggregation level. One of \code{"auto"}
-(default), \code{"annual"}, \code{"monthly"}, \code{"none"}. When \code{"auto"}, the aggregation
-is chosen based on the length of the time series: annual for > 20 years,
-monthly for 3-20 years, none for < 3 years.}
+\item{time_aggregation}{Character. Temporal aggregation level. One of
+\code{"auto"} (default), \code{"annual"}, \code{"monthly"}, or \code{"none"}.
+\code{"auto"} selects annual aggregation for time series longer than 20 years.}
 
-\item{show_ci}{Logical. If \code{TRUE} (default), adds a 95\% confidence band around
-the trend line.}
+\item{show_ci}{Logical. Whether to show the confidence interval around the
+trend line. Default is \code{TRUE}.}
 
-\item{theme}{Character. Plot theme. Either \code{"default"} (dark) or \code{"light"}.}
+\item{theme}{Character. Plot theme. Either \code{"default"} or \code{"light"}.}
+
+\item{x_breaks}{Character. Interval for x-axis breaks. Default is \code{"10 years"}.}
 }
 \value{
 A \code{ggplot2} object.
 }
 \description{
-Creates a time series plot of CMIP6 climate data for one or more scenarios.
-Automatically aggregates daily data to monthly or annual means depending on
-the length of the time series.
+Creates a time series plot for one or more CMIP6 climate scenarios.
+Supports automatic spatial and temporal aggregation, unit conversion,
+and optional LOESS trend lines with confidence intervals.
 }
 \examples{
 \dontrun{
-df_ssp245 <- read_cmip6("tas_ssp245.nc", scenario = "ssp245")
-df_ssp585 <- read_cmip6("tas_ssp585.nc", scenario = "ssp585")
-
-# Plot two scenarios
-plot_timeseries(df_ssp245, df_ssp585,
-                title = "Near-Surface Air Temperature – Bavaria")
-
-# Without trend line
-plot_timeseries(df_ssp245, show_smooth = FALSE)
-
-# Force annual aggregation
-plot_timeseries(df_ssp245, df_ssp585, time_aggregation = "annual")
+p <- plot_timeseries(
+  df_historical, df_ssp126, df_ssp585,
+  title = "Monthly Maximum Temperature\nBavaria (1980-2100)",
+  theme = "light"
+)
+print(p)
 }
-
 }

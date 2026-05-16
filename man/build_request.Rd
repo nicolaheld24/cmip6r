@@ -16,24 +16,27 @@ build_request(
 )
 }
 \arguments{
-\item{model}{Character. CMIP6 model name.}
+\item{model}{Character. CMIP6 model name (e.g. "MPI-ESM1-2-LR"). See \code{cmip6_info("models")} for all available models.}
 
-\item{variable}{Character. Climate variable.}
+\item{variable}{Character. Climate variable short name (e.g. "tas", "pr"). See \code{cmip6_info("variables")} for all available variables.}
 
-\item{scenario}{Character. Emissions scenario.}
+\item{scenario}{Character. Emissions scenario (e.g. "ssp585", "historical"). See \code{cmip6_info("scenarios")} for all available scenarios.}
 
-\item{start_year}{Integer. Start year.}
+\item{start_year}{Integer. First year of the requested time period.}
 
-\item{end_year}{Integer. End year.}
+\item{end_year}{Integer. Last year of the requested time period.}
 
-\item{months}{Integer vector. Months to request.}
+\item{months}{Integer vector. Months to include (e.g. \code{1:12} for all months).}
 
-\item{region}{List. Output of \code{resolve_region()}.}
+\item{region}{List. Output of \code{resolve_region()}, defining the spatial extent.}
+
+\item{temporal_resolution}{Character. Either \code{"monthly"} or \code{"daily"}. Default is \code{"daily"}.}
 }
 \value{
-A list formatted for the CDS API.
+A named list formatted for use with the CDS API.
 }
 \description{
-Build a CDS API Request
+Constructs a formatted request list for the Copernicus Climate Data Store (CDS) API.
+Short variable names (e.g. "tas") are automatically mapped to their CDS API equivalents.
 }
 \keyword{internal}

@@ -1,17 +1,13 @@
-#' Validate a CMIP6 Model Name
-#'
-#' @description
-#' Checks whether a given model name is in the list of known CMIP6 models.
-#' Issues a warning if the model is not recognised, but does not stop execution.
-#' The CDS API will return an error if the model is truly unavailable.
-#'
-#' @param model Character. CMIP6 model name to validate (e.g. \code{"MPI-ESM1-2-LR"}).
-#'   See \code{cmip6_info("models")} for all known models.
-#'
-#' @return Invisibly returns \code{TRUE}.
-#' @keywords internal
+test_that("multiplication works", {
+  expect_equal(2 * 2, 4)
+})
 
-validate_model <- function(model) {
+test_that("valid model returns TRUE invisibly", {
+  expect_invisible(validate_model("AWI-CM-1-1-MR"))
+  expect_true(validate_model("AWI-CM-1-1-MR"))
+})
+
+test_that("all supported models pass validation", {
   valid_models <- c(
     "ACCESS-CM2", "ACCESS-ESM1-5", "AWI-CM-1-1-MR", "AWI-ESM-1-1-LR",
     "BCC-CSM2-MR", "BCC-ESM1", "CAMS-CSM1-0", "CanESM5", "CanESM5-CanOE",
@@ -28,15 +24,13 @@ validate_model <- function(model) {
     "NESM3", "NorCPM1", "NorESM2-LM", "NorESM2-MM", "SAM0-UNICON",
     "TaiESM1", "UKESM1-0-LL"
   )
-
-  if (!model %in% valid_models) {
-    warning(
-      "Model '", model, "' is not in the known model list. ",
-      "Download will proceed, but plotting with plot_timeseries() may not work correctly. ",
-      "The CDS API will return an error if unavailable. ",
-      "Known models: ", paste(valid_models, collapse = ", ")
-    )
+  for (model in valid_models) {
+    expect_true(validate_model(model))
   }
+})
 
-  invisible(TRUE)
-}
+test_that("invalid model gives warning", {
+  expect_warning(validate_model("DOES NOT EXIST"))
+  expect_warning(validate_model(""))
+  expect_warning(validate_model("awi-cm-1-1-mr"))  # case sensitive
+})

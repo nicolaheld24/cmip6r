@@ -1,16 +1,20 @@
-# R/cmip6_dir.R
-
-#' Set the directory for CMIP6 data downloads
+#' Set the CMIP6 Data Directory
 #'
-#' @param path Character. Full path to the directory where downloaded `.nc`
-#'   files will be saved. The directory will be created if it does not exist.
+#' @description
+#' Sets the directory where downloaded CMIP6 NetCDF files are stored.
+#' Creates the directory if it does not exist. This must be called once
+#' before using \code{get_cmip6_data()}.
+#'
+#' @param path Character. Path to the directory where CMIP6 data should be saved.
+#'
+#' @return Invisibly returns \code{NULL}. Called for its side effect of
+#'   setting the \code{cmip6r.data_dir} option.
+#' @export
 #'
 #' @examples
 #' \dontrun{
-#' set_cmip6_dir("C:/Users/nicol/Desktop/EAGLE/data")
+#' set_cmip6_dir("~/cmip6_data")
 #' }
-#'
-#' @export
 
 set_cmip6_dir <- function(path) {
   if (!dir.exists(path)) {

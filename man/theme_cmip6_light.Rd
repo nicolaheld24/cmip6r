@@ -2,17 +2,21 @@
 % Please edit documentation in R/theme_cmip6_light.R
 \name{theme_cmip6_light}
 \alias{theme_cmip6_light}
-\title{Light ggplot2 Theme for cmip6r Plots}
+\title{Light Theme for CMIP6 Plots}
 \usage{
-theme_cmip6_light(base_size = 11, base_family = "lora")
+theme_cmip6_light(base_size = 10, base_family = "lora", preview = FALSE)
 }
 \arguments{
-\item{base_size}{Numeric. Base font size. Default: \code{11}.}
+\item{base_size}{Numeric. Base font size in points. Default is \code{10}.}
 
-\item{base_family}{Character. Font family. Default: \code{"lora"}.}
+\item{base_family}{Character. Font family. Default is \code{"lora"}.}
+
+\item{preview}{Logical. If \code{TRUE}, reduces font size and sets DPI to
+96 for better display in the RStudio plot pane. If \code{FALSE} (default),
+uses full size and 300 DPI for export.}
 }
 \value{
-A ggplot2 theme object.
+A \code{ggplot2} theme object.
 }
 \description{
 An alternative light-styled ggplot2 theme with a warm background,
@@ -21,10 +25,7 @@ Requires the \code{ggtext} package for markdown title rendering.
 }
 \examples{
 \dontrun{
-library(ggplot2)
-ggplot(mtcars, aes(x = wt, y = mpg)) +
-  geom_point() +
-  theme_cmip6_light()
+p <- plot_timeseries(df_ssp126, df_ssp585)
+p + theme_cmip6_light()
 }
-
 }

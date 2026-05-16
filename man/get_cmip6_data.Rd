@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_cmip6_data.R
 \name{get_cmip6_data}
 \alias{get_cmip6_data}
-\title{Download CMIP6 Climate Data from the Copernicus Climate Data Store}
+\title{Download CMIP6 Data from the Copernicus Climate Data Store}
 \usage{
 get_cmip6_data(
   model = "AWI-CM-1-1-MR",
@@ -18,50 +18,53 @@ get_cmip6_data(
 )
 }
 \arguments{
-\item{model}{Character. Name of the CMIP6 model. Default: \code{"AWI-CM-1-1-MR"}.}
+\item{model}{Character. CMIP6 model name. Default is \code{"AWI-CM-1-1-MR"}.
+See \code{cmip6_info("models")} for all available models.}
 
-\item{variable}{Character. Climate variable to download (e.g. \code{"tas"}, \code{"tasmax"}, \code{"pr"}).}
+\item{variable}{Character. Climate variable short name. Default is \code{"tas"}.
+See \code{cmip6_info("variables")} for all available variables.}
 
-\item{scenario}{Character. Emissions scenario. One of \code{"historical"}, \code{"ssp126"},
-\code{"ssp245"}, \code{"ssp370"}, \code{"ssp585"}.}
+\item{scenario}{Character. Emissions scenario. Default is \code{"ssp245"}.
+See \code{cmip6_info("scenarios")} for all available scenarios.}
 
-\item{start_year}{Integer. First year of the requested time range.}
+\item{start_year}{Integer. First year of the requested time period. Default is \code{2015}.}
 
-\item{end_year}{Integer. Last year of the requested time range.}
+\item{end_year}{Integer. Last year of the requested time period. Default is \code{2100}.}
 
-\item{months}{Integer vector. Months to download (e.g. \code{1:12} for all months).}
+\item{months}{Integer vector. Months to include. Default is \code{1:12} (all months).}
 
-\item{region}{Either \code{"global"} or a numeric vector \code{c(lon_min, lon_max, lat_min, lat_max)}.}
+\item{region}{Character or numeric vector. Either \code{"global"} for global coverage,
+or a bounding box as \code{c(lon_min, lon_max, lat_min, lat_max)}. Default is \code{"global"}.}
 
-\item{temporal_resolution}{Character. Either \code{"daily"} or \code{"monthly"}.
-Default: \code{"daily"}.}
+\item{temporal_resolution}{Character. Either \code{"monthly"} or \code{"daily"}.
+Default is \code{"daily"}.}
 
-\item{output_file}{Character. Full path and filename for the downloaded
-\code{.nc} file. Defaults to \code{model_variable_scenario.nc} in the directory
-set by \code{set_cmip6_dir()}.}
+\item{output_file}{Character. Path to save the downloaded NetCDF file.
+Defaults to the package data directory.}
 }
 \value{
-A list with two elements:
+A named list with two elements:
 \describe{
-\item{request}{The CDS API request as a list.}
-\item{file}{Path to the downloaded \code{.nc} file.}
+\item{request}{The formatted CDS API request.}
+\item{file}{Path to the downloaded NetCDF file.}
 }
 }
 \description{
-Downloads CMIP6 climate model data from the Copernicus Climate Data Store
-(CDS) API for a specified model, variable, scenario, time range, and region.
+Downloads CMIP6 climate data for a specified model, variable, scenario,
+time period, and region. Data is downloaded as a NetCDF file and saved
+to the local CMIP6 data directory.
 }
 \examples{
 \dontrun{
-result <- get_cmip6_data(
-  model      = "AWI-CM-1-1-MR",
+data <- get_cmip6_data(
   variable   = "tas",
-  scenario   = "ssp245",
-  start_year = 2020,
-  end_year   = 2025,
+  model      = "MPI-ESM1-2-LR",
+  scenario   = "ssp585",
+  start_year = 2015,
+  end_year   = 2100,
   months     = 1:12,
-  region     = c(9, 14, 47, 51)
+  region     = c(9, 14, 47, 51),
+  temporal_resolution = "monthly"
 )
 }
-
 }
