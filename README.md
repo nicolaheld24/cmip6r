@@ -208,13 +208,21 @@ df_ssp585_pr <- read_cmip6(ssp585_pr$file)
 
 p_precip <- plot_timeseries(
   df_hist_pr, df_ssp126_pr, df_ssp245_pr, df_ssp585_pr,
-  title = "Annual Precipitation\nBavaria (1980-2100)"
+  title = "Annual Precipitation\nBavaria (1980-2100)",
+  theme = "light"
 )
 
-p_precip + scale_x_date(
+p_precip <- p_precip + scale_x_date(
   breaks = seq(as.Date("1980-01-01"), as.Date("2100-01-01"), by = "10 years"),
   labels = scales::label_date("%Y")
 )
+
+# Save
+ggsave("annual_precipitation_bavaria.png",
+       plot = p_precip,
+       width = 8,
+       height = 5,
+       dpi = 300)
 ```
 
 ![Annual Precipitation Bavaria](man/figures/bavaria_precip_2015_2100.png)
