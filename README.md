@@ -156,35 +156,35 @@ Download and compare multiple SSP scenarios in a single plot:
 
 ```r
 # Download historical + three SSP scenarios
-hist   <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
+hist_tasmax   <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
                           scenario = "historical", start_year = 1980, end_year = 2014,
                           months = 1:12, region = c(9, 14, 47, 51),
                           temporal_resolution = "monthly")
 
-ssp126 <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
+ssp126_tasmax <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
                           scenario = "ssp126", start_year = 2015, end_year = 2100,
                           months = 1:12, region = c(9, 14, 47, 51),
                           temporal_resolution = "monthly")
 
-ssp245 <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
+ssp245_tasmax <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
                           scenario = "ssp245", start_year = 2015, end_year = 2100,
                           months = 1:12, region = c(9, 14, 47, 51),
                           temporal_resolution = "monthly")
 
-ssp585 <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
+ssp585_tasmax <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
                           scenario = "ssp585", start_year = 2015, end_year = 2100,
                           months = 1:12, region = c(9, 14, 47, 51),
                           temporal_resolution = "monthly")
 
 # Read files
-df_hist   <- read_cmip6(hist$file)
-df_ssp126 <- read_cmip6(ssp126$file)
-df_ssp245 <- read_cmip6(ssp245$file)
-df_ssp585 <- read_cmip6(ssp585$file)
+df_hist_tasmax   <- read_cmip6(hist_tasmax$file)
+df_ssp126_tasmax <- read_cmip6(ssp126_tasmax$file)
+df_ssp245_tasmax <- read_cmip6(ssp245_tasmax$file)
+df_ssp585_tasmax <- read_cmip6(ssp585_tasmax$file)
 
 # Plot all scenarios together
 p <- plot_timeseries(
-  df_hist, df_ssp126, df_ssp245, df_ssp585,
+  df_hist_tasmax, df_ssp126_tasmax, df_ssp245_tasmax, df_ssp585_tasmax,
   title = "Annual Mean of Daily Maximum Temperature\nBavaria (1980-2100)"
 )
 
