@@ -100,15 +100,6 @@ Before downloading CMIP6 data for the first time, you need to accept the licence
  
 1. Go to: [CMIP6 dataset page](https://cds.climate.copernicus.eu/datasets/projections-cmip6?tab=download)
 2. Scroll down to **"Terms of use"** and click **Accept**
-
-### 5. Verify the setup in R
- 
-```r
-library(cmip6r)
-
-# simple test: should not throw an error
-get_cmip6_data(start_year = 2015, end_year = 2015, months = 1)
-```
  
 ---
 ## Quick Start
@@ -128,19 +119,32 @@ result_126 <- get_cmip6_data(
   start_year          = 2015,
   end_year            = 2100,
   months              = 1:12,
-  region              = c(9, 14, 47, 51),  # bounding box: lon_min, lon_max, lat_min, lat_max
+  region              = c(9, 14, 47, 51),  # bounding box of Bavaria: lon_min, lon_max, lat_min, lat_max
   temporal_resolution = "monthly"
 )
 
 # 3. Read the downloaded NetCDF file into R
 df_126 <- read_cmip6(result_126$file)
+# df_126 <- read_cmip6("path_to_nc_file") # in case $file does not work 
 
 # 4. Plot the time series
-plot_timeseries(
+p <- plot_timeseries(
   df_126,
-  title = "Annual Maximum Temperature\nSSP1-2.6 Bavaria (2015-2100)"
+  title = "Annual Maximum Temperature\nSSP1-2.6 Bavaria (2015-2100)",
 )
+
+# Preview in RStudio
+p + theme_cmip6(preview = TRUE)
+
+# 5. Save your plot 
+ggsave("my_path/max_temp_bavaria_ssp126_2015_2100.png",
+       plot = df_126_plot,
+       width = 8,
+       height = 5,
+       dpi = 300)
 ```
+
+
 ![Annual Maximum Temperature SSP1-2.6 Bavaria](man/figures/bavaria_tasmax_ssp126_2015_2100.png)
 
 
@@ -152,35 +156,35 @@ Download and compare multiple SSP scenarios in a single plot:
 
 ```r
 # Download historical + three SSP scenarios
-hist   <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
+hist_tasmax   <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
                           scenario = "historical", start_year = 1980, end_year = 2014,
                           months = 1:12, region = c(9, 14, 47, 51),
                           temporal_resolution = "monthly")
 
-ssp126 <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
+ssp126_tasmax <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
                           scenario = "ssp126", start_year = 2015, end_year = 2100,
                           months = 1:12, region = c(9, 14, 47, 51),
                           temporal_resolution = "monthly")
 
-ssp245 <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
+ssp245_tasmax <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
                           scenario = "ssp245", start_year = 2015, end_year = 2100,
                           months = 1:12, region = c(9, 14, 47, 51),
                           temporal_resolution = "monthly")
 
-ssp585 <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
+ssp585_tasmax <- get_cmip6_data(variable = "tasmax", model = "AWI-CM-1-1-MR",
                           scenario = "ssp585", start_year = 2015, end_year = 2100,
                           months = 1:12, region = c(9, 14, 47, 51),
                           temporal_resolution = "monthly")
 
 # Read files
-df_hist   <- read_cmip6(hist$file)
-df_ssp126 <- read_cmip6(ssp126$file)
-df_ssp245 <- read_cmip6(ssp245$file)
-df_ssp585 <- read_cmip6(ssp585$file)
+df_hist_tasmax   <- read_cmip6(hist_tasmax$file)
+df_ssp126_tasmax <- read_cmip6(ssp126_tasmax$file)
+df_ssp245_tasmax <- read_cmip6(ssp245_tasmax$file)
+df_ssp585_tasmax <- read_cmip6(ssp585_tasmax$file)
 
 # Plot all scenarios together
 p <- plot_timeseries(
-  df_hist, df_ssp126, df_ssp245, df_ssp585,
+  df_hist_tasmax, df_ssp126_tasmax, df_ssp245_tasmax, df_ssp585_tasmax,
   title = "Annual Mean of Daily Maximum Temperature\nBavaria (1980-2100)"
 )
 
@@ -204,13 +208,21 @@ df_ssp585_pr <- read_cmip6(ssp585_pr$file)
 
 p_precip <- plot_timeseries(
   df_hist_pr, df_ssp126_pr, df_ssp245_pr, df_ssp585_pr,
-  title = "Annual Precipitation\nBavaria (1980-2100)"
+  title = "Annual Precipitation\nBavaria (1980-2100)",
+  theme = "light"
 )
 
-p_precip + scale_x_date(
+p_precip <- p_precip + scale_x_date(
   breaks = seq(as.Date("1980-01-01"), as.Date("2100-01-01"), by = "10 years"),
   labels = scales::label_date("%Y")
 )
+
+# Save
+ggsave("annual_precipitation_bavaria.png",
+       plot = p_precip,
+       width = 8,
+       height = 5,
+       dpi = 300)
 ```
 
 ![Annual Precipitation Bavaria](man/figures/bavaria_precip_2015_2100.png)
