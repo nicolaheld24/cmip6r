@@ -12,7 +12,7 @@ plot_timeseries(
   time_aggregation = "auto",
   show_ci = TRUE,
   theme = "default",
-  x_breaks = "10 years"
+  line_alpha = 0.4
 )
 }
 \arguments{
@@ -36,7 +36,7 @@ trend line. Default is \code{TRUE}.}
 
 \item{theme}{Character. Plot theme. Either \code{"default"} or \code{"light"}.}
 
-\item{x_breaks}{Character. Interval for x-axis breaks. Default is \code{"10 years"}.}
+\item{line_alpha}{Numeric. Transparency of the raw data lines, between 0 and 1. Default is \code{0.4}.}
 }
 \value{
 A \code{ggplot2} object.

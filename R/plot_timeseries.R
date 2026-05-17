@@ -17,6 +17,7 @@
 #'   \code{"auto"} selects annual aggregation for time series longer than 20 years.
 #' @param show_ci Logical. Whether to show the confidence interval around the
 #'   trend line. Default is \code{TRUE}.
+#' @param line_alpha Numeric. Transparency of the raw data lines, between 0 and 1. Default is \code{0.4}.
 #' @param theme Character. Plot theme. Either \code{"default"} or \code{"light"}.
 #'
 #' @return A \code{ggplot2} object.
