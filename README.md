@@ -64,7 +64,7 @@ After logging in, go to your **profile page** (top right → your username). The
  
 The CDS API looks for a hidden config file in your home directory. Create it like this:
  
-**On Windows** — open the file `C:\Users\YOURNAME\.cdsapirc` (create it if it doesn't exist) and paste:
+**On Windows**:
 1. Open Notepad
 2. Paste the following content:
 ```
