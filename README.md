@@ -2,7 +2,6 @@
  
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check](https://github.com/nicolaheld24/cmip6r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nicolaheld24/cmip6r/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
  
 > Download, process, and visualize CMIP6 climate scenario data from the [Copernicus Climate Data Store (CDS)](https://cds.climate.copernicus.eu) with publication-ready plots. 
@@ -269,8 +268,6 @@ p + theme_cmip6_light()
 # Preview mode for RStudio (smaller fonts)
 p + theme_cmip6(preview = TRUE)
 ```
-
-![Light theme example](man/figures/bavaria_tasmax_light.png)
 
 ---
 
