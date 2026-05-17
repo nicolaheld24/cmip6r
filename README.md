@@ -127,7 +127,7 @@ result_126 <- get_cmip6_data(
 df_126 <- read_cmip6(result_126$file)
 # df_126 <- read_cmip6("path_to_nc_file") # in case $file does not work 
 
-# 4. Plot the time series & look at preview 
+# 4. Plot the time series
 p <- plot_timeseries(
   df_126,
   title = "Annual Maximum Temperature\nSSP1-2.6 Bavaria (2015-2100)",
