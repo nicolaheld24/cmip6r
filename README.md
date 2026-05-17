@@ -201,24 +201,28 @@ p + scale_x_date(
 ## Precipitation Example
 
 ```r
+# Read data 
 df_hist_pr   <- read_cmip6(hist_pr$file)
 df_ssp126_pr <- read_cmip6(ssp126_pr$file)
 df_ssp245_pr <- read_cmip6(ssp245_pr$file)
 df_ssp585_pr <- read_cmip6(ssp585_pr$file)
 
+# Plot with light theme and reduced line transparency
 p_precip <- plot_timeseries(
   df_hist_pr, df_ssp126_pr, df_ssp245_pr, df_ssp585_pr,
   title = "Annual Precipitation\nBavaria (1980-2100)",
-  theme = "light"
+  theme = "light",    # use light theme (warm off-white background)
+  line_alpha = 0.3    # reduce transparency of raw data lines (default: 0.4)
 )
 
+# Customize x-axis breaks
 p_precip <- p_precip + scale_x_date(
   breaks = seq(as.Date("1980-01-01"), as.Date("2100-01-01"), by = "10 years"),
   labels = scales::label_date("%Y")
 )
 
 # Save
-ggsave("annual_precipitation_bavaria.png",
+ggsave("my_path/annual_precipitation_bavaria.png",
        plot = p_precip,
        width = 8,
        height = 5,
