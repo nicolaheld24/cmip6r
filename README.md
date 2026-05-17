@@ -138,7 +138,7 @@ df_126 <- read_cmip6(result_126$file)
 # 4. Plot the time series
 plot_timeseries(
   df_126,
-  title = "Monthly Maximum Temperature\nBavaria (2015-2100)"
+  title = "Annual Maximum Temperature\nSSP1-2.6 Bavaria (2015-2100)"
 )
 ```
 ![Annual Maximum Temperature SSP1-2.6 Bavaria](man/figures/bavaria_tasmax_ssp126_2015_2100.png)
