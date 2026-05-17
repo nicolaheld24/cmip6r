@@ -238,12 +238,12 @@ ggsave("my_path/annual_precipitation_bavaria.png",
 
 ```r
 plot_timeseries(
-  df_ssp245, df_ssp585,
   aggregation      = "mean",    # "mean", "max", "min", "median"
   time_aggregation = "annual",  # "auto", "annual", "monthly", "none"
   show_smooth      = TRUE,      # LOESS trend line
   show_ci          = TRUE,      # 95% confidence band
-  theme            = "light"    # "default" or "light"
+  theme            = "light",   # "default" or "light"
+  line_alpha       = 0.4        # transparency of raw data lines (0-1)
 )
 ```
 
@@ -263,7 +263,7 @@ Two built-in themes are available:
 # Default theme
 p + theme_cmip6()
 
-# Light theme (warm off-white background)
+# Light theme (warm off-white background with white gridlines)
 p + theme_cmip6_light()
 
 # Preview mode for RStudio (smaller fonts)
