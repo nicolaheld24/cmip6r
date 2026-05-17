@@ -38,7 +38,7 @@ theme_cmip6_light <- function(base_size = 10, base_family = "lora", preview = FA
     ggplot2::theme(
       plot.title           = ggplot2::element_text(
         face = "bold", hjust = 0.5, size = actual_size * 1.5,
-        lineheight = 1.2, color = txt_col),
+        lineheight = 1.2, color = "#4a4a4a"),
       plot.title.position  = "plot",
       plot.background      = ggplot2::element_rect(color = bg, fill = bg),
       panel.background     = ggplot2::element_rect(color = bg, fill = bg),
@@ -49,7 +49,7 @@ theme_cmip6_light <- function(base_size = 10, base_family = "lora", preview = FA
       legend.position      = "bottom",
       legend.justification = "center",
       legend.title         = ggplot2::element_blank(),
-      legend.text          = ggplot2::element_text(size = actual_size * 1.0, color = txt_col),
+      legend.text          = ggplot2::element_text(size = actual_size * 1.0, color = "#4a4a4a"),
       legend.spacing.x     = ggplot2::unit(0.3, "cm"),
       plot.margin          = ggplot2::margin(10, 10, 10, 10)
     )

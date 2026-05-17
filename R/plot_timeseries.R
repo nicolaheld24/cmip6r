@@ -18,7 +18,6 @@
 #' @param show_ci Logical. Whether to show the confidence interval around the
 #'   trend line. Default is \code{TRUE}.
 #' @param theme Character. Plot theme. Either \code{"default"} or \code{"light"}.
-#' @param x_breaks Character. Interval for x-axis breaks. Default is \code{"10 years"}.
 #'
 #' @return A \code{ggplot2} object.
 #' @export
@@ -40,7 +39,7 @@ plot_timeseries <- function(..., aggregation = "mean", title = NULL,
                             time_aggregation = "auto",
                             show_ci = TRUE,
                             theme = "default",
-                            x_breaks = "10 years") {
+                            line_alpha = 0.4) {
 
   # 1. Collect all data.frames
   dfs <- list(...)
@@ -64,7 +63,6 @@ plot_timeseries <- function(..., aggregation = "mean", title = NULL,
                    "median" = function(x) median(x, na.rm = TRUE),
                    stop("Invalid aggregation. Choose: 'mean', 'max', 'min', 'median'")
   )
-
   # 4a. Aggregate spatially per time step and scenario
   combined <- dplyr::bind_rows(dfs) |>
     dplyr::group_by(time, scenario) |>
@@ -154,7 +152,7 @@ plot_timeseries <- function(..., aggregation = "mean", title = NULL,
     ggplot2::geom_line(
       ggplot2::aes(color = scenario, linetype = scenario, group = scenario),
       linewidth = 0.7,
-      alpha = 0.4
+      alpha = line_alpha
     )
 
   # 9. Optionally add trend line
