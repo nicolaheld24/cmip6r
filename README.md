@@ -178,7 +178,6 @@ p + scale_x_date(
 ```
 
 ![Annual Maximum Temperature Bavaria](man/figures/bavaria_tasmax_1980_2100.png)
-
 ---
 
 ## Precipitation Example
@@ -200,8 +199,7 @@ p_precip + scale_x_date(
 )
 ```
 
-![Annual Precipitation Bavaria](man/figures/bavaria_precip_1980_2100.png)
-
+![Annual Precipitation Bavaria](man/figures/bavaria_precip_2015_2100.png)
 ---
 
 ## Plot Options
