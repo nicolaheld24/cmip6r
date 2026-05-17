@@ -128,19 +128,32 @@ result_126 <- get_cmip6_data(
   start_year          = 2015,
   end_year            = 2100,
   months              = 1:12,
-  region              = c(9, 14, 47, 51),  # bounding box: lon_min, lon_max, lat_min, lat_max
+  region              = c(9, 14, 47, 51),  # bounding box of Bavaria: lon_min, lon_max, lat_min, lat_max
   temporal_resolution = "monthly"
 )
 
 # 3. Read the downloaded NetCDF file into R
 df_126 <- read_cmip6(result_126$file)
+# df_126 <- read_cmip6("path_to_nc_file") # in case $file does not work 
 
-# 4. Plot the time series
-plot_timeseries(
+# 4. Plot the time series & look at preview 
+p <- plot_timeseries(
   df_126,
-  title = "Annual Maximum Temperature\nSSP1-2.6 Bavaria (2015-2100)"
+  title = "Annual Maximum Temperature\nSSP1-2.6 Bavaria (2015-2100)",
 )
+
+# Preview in RStudio
+p + theme_cmip6(preview = TRUE)
+
+# 5. Save your plot 
+ggsave("my_path/max_temp_bavaria_ssp126_2015_2100.png",
+       plot = df_126_plot,
+       width = 8,
+       height = 5,
+       dpi = 300)
 ```
+
+
 ![Annual Maximum Temperature SSP1-2.6 Bavaria](man/figures/bavaria_tasmax_ssp126_2015_2100.png)
 
 
