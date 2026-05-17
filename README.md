@@ -100,15 +100,6 @@ Before downloading CMIP6 data for the first time, you need to accept the licence
  
 1. Go to: [CMIP6 dataset page](https://cds.climate.copernicus.eu/datasets/projections-cmip6?tab=download)
 2. Scroll down to **"Terms of use"** and click **Accept**
-
-### 5. Verify the setup in R
- 
-```r
-library(cmip6r)
-
-# simple test: should not throw an error
-get_cmip6_data(start_year = 2015, end_year = 2015, months = 1)
-```
  
 ---
 ## Quick Start
