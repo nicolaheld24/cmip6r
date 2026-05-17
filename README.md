@@ -225,7 +225,7 @@ ggsave("annual_precipitation_bavaria.png",
        dpi = 300)
 ```
 
-![Annual Precipitation Bavaria](man/figures/bavaria_precip_2015_2100.png)
+![Annual Precipitation Bavaria](man/figures/bavaria_precip_2015_2100_light.png)
 ---
 
 ## Plot Options
