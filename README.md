@@ -42,7 +42,8 @@ remotes::install_github("nicolaheld24/cmip6r")
 - **`ggplot2`** – visualization
 - **`dplyr`** – data manipulation
 - **`ncdf4`** – NetCDF file handling
-- **`reticulate`** – Python integration
+- **`reticulate`** – Python integration (the `cdsapi` Python package is 
+  installed automatically on first use via `reticulate::py_install()`)
 - **`showtext`**, **`sysfonts`** – enhanced fonts for plots
 - **`scales`** – axis formatting
 
