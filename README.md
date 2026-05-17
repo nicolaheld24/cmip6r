@@ -109,7 +109,7 @@ library(cmip6r)
 library(ggplot2) # only needed for additional plot customization
 
 # 1. Set data directory
-set_cmip6_dir("yourpath/data")
+set_cmip6_dir("my_path/data")
  
 # 2. Download monthly maximum temperature for Bavaria
 result_126 <- get_cmip6_data(
