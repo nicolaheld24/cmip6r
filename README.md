@@ -23,8 +23,6 @@ and visualization for the four most common variables for climate scenario plotti
 variables, the downloaded NetCDF file can be read with `read_cmip6()` and plotted manually with
 any R package (e.g. `ggplot2`, `terra`).
 
-// BIS HIER HIN 
-
 | Variable | Description | Unit |
 |----------|-------------|------|
 | `"tas"`    | Mean near-surface air temperature | °C |
@@ -67,11 +65,25 @@ After logging in, go to your **profile page** (top right → your username). The
 The CDS API looks for a hidden config file in your home directory. Create it like this:
  
 **On Windows** — open the file `C:\Users\YOURNAME\.cdsapirc` (create it if it doesn't exist) and paste:
- 
+1. Open Notepad
+2. Paste the following content:
 ```
 url: https://cds.climate.copernicus.eu/api
 key: YOUR-API-KEY
 ```
+3. Go to **File → Save As**
+4. Navigate to `C:\Users\YOURNAME\`
+5. Set **"Save as type"** to **"All Files (*.*)"** — this is important, otherwise Windows saves it as `.cdsapirc.txt` which won't work
+6. Name the file exactly `.cdsapirc` (with the dot at the beginning, no extension)
+7. Click Save
+
+To verify the file was created correctly, run in R:
+```r
+file.exists(file.path(Sys.getenv("HOME"), ".cdsapirc"))  # should return TRUE
+Sys.getenv("HOME")  # shows where R is looking for the file
+```
+
+If it returns `FALSE`, the file is either named `.cdsapirc.txt` or saved in the wrong location.
  
 **On macOS/Linux** — run in the terminal:
  
@@ -103,7 +115,7 @@ get_cmip6_data(start_year = 2015, end_year = 2015, months = 1)
  
 ```r
 library(cmip6r)
-library(ggplot2)
+library(ggplot2) # only needed for additional plot customization
 
 # 1. Set data directory
 set_cmip6_dir("yourpath/data")
@@ -129,6 +141,8 @@ plot_timeseries(
   title = "Monthly Maximum Temperature\nBavaria (2015-2100)"
 )
 ```
+![Annual Maximum Temperature SSP1-2.6 Bavaria](man/figures/bavaria_tasmax_ssp126_2015_2100.png)
+
 
 ---
 
@@ -247,12 +261,9 @@ p + theme_cmip6(preview = TRUE)
 ## Saving Plots
 
 ```r
-# Set DPI before saving for correct font rendering
-showtext::showtext_opts(dpi = 300)
 
-ggsave("my_plot.png", plot = p, width = 8, height = 5, dpi = 300)
+ggsave("my_path/my_plot.png", plot = p, width = 8, height = 5, dpi = 300)
 
-showtext::showtext_opts(dpi = 96)  # reset for RStudio preview
 ```
 
 ---
