@@ -33,7 +33,7 @@ theme_cmip6_light <- function(base_size = 10, base_family = "lora", preview = FA
     showtext::showtext_opts(dpi = 300)
   }
   bg      <- "#F4F5F1"
-  txt_col <- "black"
+  txt_col <- "#555555"
   ggplot2::theme_minimal(base_size = actual_size, base_family = base_family) +
     ggplot2::theme(
       plot.title           = ggplot2::element_text(
@@ -43,7 +43,7 @@ theme_cmip6_light <- function(base_size = 10, base_family = "lora", preview = FA
       plot.background      = ggplot2::element_rect(color = bg, fill = bg),
       panel.background     = ggplot2::element_rect(color = bg, fill = bg),
       panel.grid.minor     = ggplot2::element_blank(),
-      panel.grid.major     = ggplot2::element_line(color = "#E0E0D8"),
+      panel.grid.major     = ggplot2::element_line(color = "white"), #E0E0D8
       axis.text            = ggplot2::element_text(size = actual_size * 0.9, color = txt_col),
       axis.title           = ggplot2::element_text(size = actual_size * 1.0, color = txt_col),
       legend.position      = "bottom",
