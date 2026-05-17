@@ -2,7 +2,6 @@
  
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check](https://github.com/nicolaheld24/cmip6r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nicolaheld24/cmip6r/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
  
 > Download, process, and visualize CMIP6 climate scenario data from the [Copernicus Climate Data Store (CDS)](https://cds.climate.copernicus.eu) with publication-ready plots. 
@@ -64,7 +63,7 @@ After logging in, go to your **profile page** (top right → your username). The
  
 The CDS API looks for a hidden config file in your home directory. Create it like this:
  
-**On Windows** — open the file `C:\Users\YOURNAME\.cdsapirc` (create it if it doesn't exist) and paste:
+**On Windows**:
 1. Open Notepad
 2. Paste the following content:
 ```
@@ -109,7 +108,7 @@ library(cmip6r)
 library(ggplot2) # only needed for additional plot customization
 
 # 1. Set data directory
-set_cmip6_dir("yourpath/data")
+set_cmip6_dir("my_path/data")
  
 # 2. Download monthly maximum temperature for Bavaria
 result_126 <- get_cmip6_data(
@@ -201,31 +200,35 @@ p + scale_x_date(
 ## Precipitation Example
 
 ```r
+# Read data 
 df_hist_pr   <- read_cmip6(hist_pr$file)
 df_ssp126_pr <- read_cmip6(ssp126_pr$file)
 df_ssp245_pr <- read_cmip6(ssp245_pr$file)
 df_ssp585_pr <- read_cmip6(ssp585_pr$file)
 
+# Plot with light theme and reduced line transparency
 p_precip <- plot_timeseries(
   df_hist_pr, df_ssp126_pr, df_ssp245_pr, df_ssp585_pr,
   title = "Annual Precipitation\nBavaria (1980-2100)",
-  theme = "light"
+  theme = "light",    # use light theme (warm off-white background)
+  line_alpha = 0.3    # reduce transparency of raw data lines (default: 0.4)
 )
 
+# Customize x-axis breaks
 p_precip <- p_precip + scale_x_date(
   breaks = seq(as.Date("1980-01-01"), as.Date("2100-01-01"), by = "10 years"),
   labels = scales::label_date("%Y")
 )
 
 # Save
-ggsave("annual_precipitation_bavaria.png",
+ggsave("my_path/annual_precipitation_bavaria.png",
        plot = p_precip,
        width = 8,
        height = 5,
        dpi = 300)
 ```
 
-![Annual Precipitation Bavaria](man/figures/bavaria_precip_2015_2100.png)
+![Annual Precipitation Bavaria](man/figures/bavaria_precip_2015_2100_light.png)
 ---
 
 ## Plot Options
@@ -234,12 +237,12 @@ ggsave("annual_precipitation_bavaria.png",
 
 ```r
 plot_timeseries(
-  df_ssp245, df_ssp585,
   aggregation      = "mean",    # "mean", "max", "min", "median"
   time_aggregation = "annual",  # "auto", "annual", "monthly", "none"
   show_smooth      = TRUE,      # LOESS trend line
   show_ci          = TRUE,      # 95% confidence band
-  theme            = "light"    # "default" or "light"
+  theme            = "light",   # "default" or "light"
+  line_alpha       = 0.4        # transparency of raw data lines (0-1)
 )
 ```
 
@@ -259,14 +262,12 @@ Two built-in themes are available:
 # Default theme
 p + theme_cmip6()
 
-# Light theme (warm off-white background)
+# Light theme (warm off-white background with white gridlines)
 p + theme_cmip6_light()
 
 # Preview mode for RStudio (smaller fonts)
 p + theme_cmip6(preview = TRUE)
 ```
-
-![Light theme example](man/figures/bavaria_tasmax_light.png)
 
 ---
 
