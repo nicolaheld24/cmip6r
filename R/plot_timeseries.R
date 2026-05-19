@@ -115,7 +115,7 @@ plot_timeseries <- function(..., aggregation = "mean", title = NULL,
 
   # 5. Color palettes
   scenario_colors <- c(
-    "SSP1-2.6"   = "#feda75",
+    "SSP1-2.6"   = "#e6c55a",
     "SSP2-4.5"   = "#fa7e1e",
     "SSP3-7.0"   = "#ae0001",
     "SSP5-8.5"   = "#962fbf",
