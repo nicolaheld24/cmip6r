@@ -130,18 +130,20 @@ df_126 <- read_cmip6(result_126$file)
 # 4. Plot the time series
 p <- plot_timeseries(
   df_126,
-  title = "Annual Maximum Temperature\nSSP1-2.6 Bavaria (2015-2100)",
+  title = "Annual Maximum Temperature\nSSP1-2.6 Bavaria (2015-2100)"
 )
 
 # Preview in RStudio
-p + theme_cmip6(preview = TRUE)
+preview <- p + theme_cmip6(preview = TRUE)
+preview 
 
 # 5. Save your plot 
-ggsave("my_path/max_temp_bavaria_ssp126_2015_2100.png",
-       plot = df_126_plot,
-       width = 8,
-       height = 5,
-       dpi = 300)
+save_plot(
+       p,
+       "max_temp_bavaria_ssp126_2015_2100.png",
+       # width  = 8,   # optional: adjust width in inches
+       # height = 5,   # optional: adjust height in inches
+       # dpi    = 300  # optional: adjust resolution
 ```
 
 
