@@ -338,6 +338,7 @@ cmip6_info("example")   # show a usage example
 | `cmip6_info()`      | Display available variables, scenarios, models |
 | `theme_cmip6()`     | Default ggplot2 theme                        |
 | `theme_cmip6_light()` | Light ggplot2 theme                        |
+| `save_plot()`       | Save a plot to the CMIP6 directory as .png   |
 
 ---
 
