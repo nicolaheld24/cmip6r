@@ -140,10 +140,8 @@ preview
 # 5. Save your plot 
 save_plot(
        p,
-       "max_temp_bavaria_ssp126_2015_2100.png",
-       # width  = 8,   # optional: adjust width in inches
-       # height = 5,   # optional: adjust height in inches
-       # dpi    = 300  # optional: adjust resolution
+       "bavaria_tasmax_ssp126_2015_2100.png"
+)
 ```
 
 
@@ -224,11 +222,10 @@ p_precip <- p_precip + scale_x_date(
 )
 
 # Save
-ggsave("my_path/annual_precipitation_bavaria.png",
-       plot = p_precip,
-       width = 8,
-       height = 5,
-       dpi = 300)
+save_plot(
+       p,
+       "bavaria_precip_2015_2100_light.png"
+)
 ```
 
 ![Annual Precipitation Bavaria](man/figures/bavaria_precip_2015_2100_light.png)
@@ -278,8 +275,13 @@ p + theme_cmip6(preview = TRUE)
 
 ```r
 
-ggsave("my_path/my_plot.png", plot = p, width = 8, height = 5, dpi = 300)
-
+save_plot(
+       p,
+       "name_of_plot.png" # saved automatically to your cmip6 directory
+       # width  = 8,      # optional: adjust width in inches
+       # height = 5,      # optional: adjust height in inches
+       # dpi    = 300     # optional: adjust resolution
+)
 ```
 
 ---
