@@ -42,7 +42,8 @@ remotes::install_github("nicolaheld24/cmip6r")
 - **`ggplot2`** – visualization
 - **`dplyr`** – data manipulation
 - **`ncdf4`** – NetCDF file handling
-- **`reticulate`** – Python integration
+- **`reticulate`** – Python integration (the `cdsapi` Python package is 
+  installed automatically on first use via `reticulate::py_install()`)
 - **`showtext`**, **`sysfonts`** – enhanced fonts for plots
 - **`scales`** – axis formatting
 
@@ -129,18 +130,18 @@ df_126 <- read_cmip6(result_126$file)
 # 4. Plot the time series
 p <- plot_timeseries(
   df_126,
-  title = "Annual Maximum Temperature\nSSP1-2.6 Bavaria (2015-2100)",
+  title = "Annual Maximum Temperature\nSSP1-2.6 Bavaria (2015-2100)"
 )
 
 # Preview in RStudio
-p + theme_cmip6(preview = TRUE)
+preview <- p + theme_cmip6(preview = TRUE)
+preview 
 
 # 5. Save your plot 
-ggsave("my_path/max_temp_bavaria_ssp126_2015_2100.png",
-       plot = df_126_plot,
-       width = 8,
-       height = 5,
-       dpi = 300)
+save_plot(
+       p,
+       "bavaria_tasmax_ssp126_2015_2100.png"
+)
 ```
 
 
@@ -221,11 +222,10 @@ p_precip <- p_precip + scale_x_date(
 )
 
 # Save
-ggsave("my_path/annual_precipitation_bavaria.png",
-       plot = p_precip,
-       width = 8,
-       height = 5,
-       dpi = 300)
+save_plot(
+       p,
+       "bavaria_precip_2015_2100_light.png"
+)
 ```
 
 ![Annual Precipitation Bavaria](man/figures/bavaria_precip_2015_2100_light.png)
@@ -275,8 +275,13 @@ p + theme_cmip6(preview = TRUE)
 
 ```r
 
-ggsave("my_path/my_plot.png", plot = p, width = 8, height = 5, dpi = 300)
-
+save_plot(
+       p,
+       "name_of_plot.png" # saved automatically to your cmip6 directory
+       # width  = 8,      # optional: adjust width in inches
+       # height = 5,      # optional: adjust height in inches
+       # dpi    = 300     # optional: adjust resolution
+)
 ```
 
 ---
