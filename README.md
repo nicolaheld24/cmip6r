@@ -145,7 +145,7 @@ save_plot(
 ```
 
 
-![Annual Maximum Temperature SSP1-2.6 Bavaria](# man/figures/bavaria_tasmax_ssp126_2015_2100.png)
+![Annual Maximum Temperature SSP1-2.6 Bavaria](man/figures/bavaria_tasmax_ssp126_2015_2100.png)
 
 
 ---
@@ -195,7 +195,7 @@ p + scale_x_date(
 )
 ```
 
-![Annual Maximum Temperature Bavaria](# man/figures/bavaria_tasmax_1980_2100.png)
+![Annual Maximum Temperature Bavaria](man/figures/bavaria_tasmax_1980_2100.png)
 ---
 
 ## Precipitation Example
@@ -228,7 +228,7 @@ save_plot(
 )
 ```
 
-![Annual Precipitation Bavaria](# man/figures/bavaria_precip_2015_2100_light.png)
+![Annual Precipitation Bavaria](man/figures/bavaria_precip_2015_2100_light.png)
 ---
 
 ## Plot Options
